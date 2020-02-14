@@ -1,0 +1,5 @@
+.env
+.repo/
+
+# certs
+*.pem
