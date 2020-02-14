@@ -11,3 +11,5 @@ oc_login:
 frontend: oc_login
 	./frontend/deploy.sh
 
+datagrid: oc_login
+	./datagrid/deploy.sh

@@ -1,0 +1,9 @@
+<infinispan>
+    <cache-container>
+        <distributed-cache-configuration name="distributed-off-heap">
+            <memory>
+                <off-heap/>
+            </memory>
+        </distributed-cache-configuration>
+    </cache-container>
+</infinispan>
