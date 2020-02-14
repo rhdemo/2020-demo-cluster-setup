@@ -1,0 +1,5 @@
+create cache --file=/config/distributed-off-heap.xml players
+create cache --file=/config/distributed-off-heap.xml game
+
+cd caches/game
+put --encoding=application/json --file=/config/game-config.json game
