@@ -33,3 +33,17 @@ make frontend
 ```
 Game UI: http://game-frontend.cluster-host
 Admin UI: http://admin-frontend.cluster-host (blank password unless `ADMIN_PASSWORD` was set in the .env file)
+
+## Strimzi and Apache Kafka
+
+The Apache Kafka related deployment is made by:
+
+* The Strimzi operators, starting from the Cluster operator to the Topic and User operators
+* The Apache Kafka cluster deployment (alongside with a Zookeeper cluster)
+* The monitoring infrastructure made by Prometheus, the related alert manager and Grafana with Kafka and Zookeeper dashboards
+
+To deploy the Apache Kafka infrastructure:
+
+```bash
+make kafka
+```
