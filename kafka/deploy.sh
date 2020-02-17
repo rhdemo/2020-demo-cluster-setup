@@ -21,9 +21,9 @@ else
     echo "Kafka operator not valid!"
     exit 1
 fi
-#$DIR/02-deploy-kafka.sh
+$DIR/02-deploy-kafka.sh
 #$DIR/05-deploy-monitoring.sh
-#$DIR/06-deploy-topics.sh
+$DIR/03-deploy-topics.sh
 
 echo ""
 echo "... KAFKA CLUSTER DEPLOYED!"
