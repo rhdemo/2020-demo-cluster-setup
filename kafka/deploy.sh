@@ -22,8 +22,8 @@ else
     exit 1
 fi
 $DIR/02-deploy-kafka.sh
-#$DIR/05-deploy-monitoring.sh
-$DIR/03-deploy-topics.sh
+$DIR/03-deploy-monitoring.sh
+$DIR/04-deploy-topics.sh
 
 echo ""
 echo "... KAFKA CLUSTER DEPLOYED!"
