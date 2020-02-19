@@ -10,7 +10,8 @@ spec:
       plain: {}
       tls: {}
       external:
-        type: route
+        type: loadbalancer
+        tls: false
     readinessProbe:
       initialDelaySeconds: 15
       timeoutSeconds: 5
@@ -30,7 +31,7 @@ spec:
         type: persistent-claim
         size: 100Gi
         deleteClaim: true
-        storageClass: gp2
+        class: gp2
     #resources:
     #  requests:
     #    cpu: "2"
@@ -147,7 +148,7 @@ spec:
       type: persistent-claim
       size: 100Gi
       deleteClaim: true
-      storageClass: gp2
+      class: gp2
     #resources:
     #  requests:
     #    cpu: "1"
