@@ -23,10 +23,35 @@ do
 done
 echo "...Zookeeper cluster ready"
 
+# waiting for the LB address 
+echo "Waiting LB address for $CLUSTER-kafka-external-bootstrap service..."
+lbAddress=""
+while [ -z "$lbAddress" ]
+do
+    sleep 5
+    lbAddress=$(oc get svc $CLUSTER-kafka-external-bootstrap -o jsonpath='{.status.loadBalancer.ingress[].hostname}')
+    echo "... $lbAddress"
+done
+echo "...LB address for $CLUSTER-kafka-external-bootstrap service ready"
+
+kReplicas=$(oc get kafka $CLUSTER -o jsonpath="{.spec.kafka.replicas}" -n $NAMESPACE)
+
+for ((i=0; i<kReplicas; i++))
+do
+    echo "Waiting LB address for $CLUSTER-kafka-$i service..."
+    lbAddress=""
+    while [ -z "$lbAddress" ]
+    do
+        sleep 5
+        lbAddress=$(oc get svc $CLUSTER-kafka-$i -o jsonpath='{.status.loadBalancer.ingress[].hostname}')
+        echo "... $lbAddress"
+    done
+    echo "...LB address for $CLUSTER-kafka-$i service ready"
+done
+
 # delay for allowing cluster operator to create the Kafka statefulset
 sleep 5
 
-kReplicas=$(oc get kafka $CLUSTER -o jsonpath="{.spec.kafka.replicas}" -n $NAMESPACE)
 echo "Waiting for Kafka cluster to be ready..."
 readyReplicas="0"
 while [ "$readyReplicas" != "$kReplicas" ]
