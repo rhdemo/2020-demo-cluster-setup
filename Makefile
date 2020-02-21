@@ -16,3 +16,6 @@ datagrid: oc_login
 
 kafka: oc_login
 	./kafka/deploy_kafka.sh
+
+kafka_mirror_maker: oc_login
+	./kafka/deploy-kafka-mirror-maker.sh

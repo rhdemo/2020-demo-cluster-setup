@@ -1,0 +1,67 @@
+apiVersion: kafka.strimzi.io/v1alpha1
+kind: KafkaMirrorMaker2
+metadata:
+  name: my-mirror-maker-2
+spec:
+  version: 2.4.0
+  replicas: 1
+  connectCluster: "hq"
+  config:
+    config.storage.replication.factor: 1
+    offset.storage.replication.factor: 1
+    status.storage.replication.factor: 1
+  clusters:
+  - alias: "hq"
+    bootstrapServers: my-cluster-kafka-bootstrap.myproject.svc:9092
+  - alias: "demo2"
+    bootstrapServers: demo2-external-bootstrap-address:9094
+  - alias: "mcm1"
+    bootstrapServers: mcm1-external-bootstrap-address:9094
+  - alias: "aks"
+    bootstrapServers: aks-external-bootstrap-address:9094
+  mirrors:
+  - sourceCluster: "demo2"
+    targetCluster: "hq"
+    sourceConnector:
+      config:
+        replication.factor: 1
+        offset-syncs.topic.replication.factor: 1
+        sync.topic.acls.enabled: "false"
+    heartbeatConnector:
+      config:
+        heartbeats.topic.replication.factor: 1
+    checkpointConnector:
+      config:
+        checkpoints.topic.replication.factor: 1
+    topicsPattern: ".*"
+    groupsPattern: ".*"
+  - sourceCluster: "mcm1"
+    targetCluster: "hq"
+    sourceConnector:
+      config:
+        replication.factor: 1
+        offset-syncs.topic.replication.factor: 1
+        sync.topic.acls.enabled: "false"
+    heartbeatConnector:
+      config:
+        heartbeats.topic.replication.factor: 1
+    checkpointConnector:
+      config:
+        checkpoints.topic.replication.factor: 1
+    topicsPattern: ".*"
+    groupsPattern: ".*"
+  - sourceCluster: "aks"
+    targetCluster: "hq"
+    sourceConnector:
+      config:
+        replication.factor: 1
+        offset-syncs.topic.replication.factor: 1
+        sync.topic.acls.enabled: "false"
+    heartbeatConnector:
+      config:
+        heartbeats.topic.replication.factor: 1
+    checkpointConnector:
+      config:
+        checkpoints.topic.replication.factor: 1
+    topicsPattern: ".*"
+    groupsPattern: ".*"
