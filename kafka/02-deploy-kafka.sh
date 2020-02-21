@@ -1,8 +1,8 @@
 #!/bin/bash
 
-NAMESPACE=${KAFKA_NAMESPACE:-strimzi-demo}
-CLUSTER=${KAFKA_CLUSTER:-demo2019}
-VERSION=${KAFKA_VERSION:-2.1.0}
+NAMESPACE=${KAFKA_NAMESPACE:-kafka-demo}
+CLUSTER=${KAFKA_CLUSTER:-demo2020}
+VERSION=${KAFKA_VERSION:-2.4.0}
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 sed "s/my-cluster/$CLUSTER/" $DIR/cluster/kafka-persistent-with-metrics.yaml > $DIR/cluster/$CLUSTER-kafka-persistent-with-metrics.yaml
@@ -28,9 +28,9 @@ echo "Waiting LB address for $CLUSTER-kafka-external-bootstrap service..."
 lbAddress=""
 while [ -z "$lbAddress" ]
 do
-    sleep 5
     lbAddress=$(oc get svc $CLUSTER-kafka-external-bootstrap -o jsonpath='{.status.loadBalancer.ingress[].hostname}')
     echo "... $lbAddress"
+    sleep 5
 done
 echo "...LB address for $CLUSTER-kafka-external-bootstrap service ready"
 
@@ -42,9 +42,9 @@ do
     lbAddress=""
     while [ -z "$lbAddress" ]
     do
-        sleep 5
         lbAddress=$(oc get svc $CLUSTER-kafka-$i -o jsonpath='{.status.loadBalancer.ingress[].hostname}')
         echo "... $lbAddress"
+        sleep 5
     done
     echo "...LB address for $CLUSTER-kafka-$i service ready"
 done
@@ -71,8 +71,21 @@ echo "...entity operator ready"
 # delay for allowing cluster operator to create the Kafka Exporter deployment
 sleep 5
 
-echo "Waiting for kafka exporter to be ready..."
+echo "Waiting for Kafka exporter to be ready..."
 oc rollout status deployment/$CLUSTER-kafka-exporter -w -n $NAMESPACE
-echo "...kafka exporter ready"
+echo "...Kafka exporter ready"
 
 rm $DIR/cluster/$CLUSTER-kafka-persistent-with-metrics.yaml
+
+# waiting finally Kafka is ready
+kStatus="NotReady"
+while [ "$kStatus" != "Ready" ]
+do
+    kStatus=$(oc get kafka $CLUSTER -o jsonpath='{.status.conditions[].type}')
+    sleep 2
+done
+
+# printing external access service for Kafka Mirror Maker
+svcExternalBootstrapHostname=$(oc get kafka $CLUSTER -o jsonpath='{.status.listeners[?(@.type == "external")].addresses[].host}')
+svcExternalBootstrapPort=$(oc get kafka $CLUSTER -o jsonpath='{.status.listeners[?(@.type == "external")].addresses[].port}')
+echo "$CLUSTER - svc external bootstrap: $svcExternalBootstrapHostname:$svcExternalBootstrapPort"
