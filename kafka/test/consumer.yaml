@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: consumer_name
+  name: consumer_name
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consumer_name
+  template:
+    metadata:
+      labels:
+        app: consumer_name
+    spec:
+      containers:
+      - name: consumer_name
+        image: strimzi/hello-world-consumer:latest
+        env:
+          - name: BOOTSTRAP_SERVERS
+            value: bootstrap_servers
+          - name: TOPIC
+            value: topic
+          - name: GROUP_ID
+            value: groupid
+          - name: LOG_LEVEL
+            value: "INFO"
+          - name: MESSAGE_COUNT
+            value: "1000000"

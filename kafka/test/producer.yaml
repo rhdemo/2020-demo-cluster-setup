@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: producer_name
+  name: producer_name
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: producer_name
+  template:
+    metadata:
+      labels:
+        app: producer_name
+    spec:
+      containers:
+      - name: producer_name
+        image: strimzi/hello-world-producer:latest
+        env:
+          - name: BOOTSTRAP_SERVERS
+            value: bootstrap_servers
+          - name: TOPIC
+            value: topic
+          - name: DELAY_MS
+            value: "1000"
+          - name: LOG_LEVEL
+            value: "INFO"
+          - name: MESSAGE_COUNT
+            value: "1000000"
+          - name: MESSAGE
+            value: message
