@@ -15,4 +15,4 @@ datagrid: oc_login
 	./datagrid/deploy.sh
 
 kafka: oc_login
-	./kafka/deploy.sh
+	./kafka/deploy_kafka.sh
