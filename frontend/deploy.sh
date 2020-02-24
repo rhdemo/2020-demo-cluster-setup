@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -x
 
 printf "\n\n######## frontend/deploy ########\n"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -61,13 +60,25 @@ else
 fi
 oc process -f "${DIR}/phone-ui.yml" ${PHONE_UI_PARAMS} | oc create -f -
 
-#oc process -f "${DIR}/dashboard-server.yml" \
-#  -p IMAGE_REPOSITORY=${IMAGE_REPOSITORY} \
-#  -p REPLICAS=${REPLICAS} \
-#  | oc create -f -
-#
-#oc process -f "${DIR}/dashboard-ui.yml" \
-#  -p IMAGE_REPOSITORY=${IMAGE_REPOSITORY} \
-#  -p REPLICAS=${REPLICAS} \
-#  -p ROUTE_NAME=${ROUTE_NAME} \
-#  | oc create -f -
+
+if [[ "${FRONTEND_MINI}" = "true" ]]; then
+    DASHBOARD_SERVER_PARAMS="IMAGE_REPOSITORY=quay.io/${QUAY_ORG}/2020-dashboard-server:latest \
+    -p REPLICAS=1 \
+    -p CONTAINER_REQUEST_CPU=100m \
+    -p CONTAINER_REQUEST_MEMORY=100Mi"
+else
+    DASHBOARD_SERVER_PARAMS="-p REPLICAS=2"
+fi
+oc process -f "${DIR}/dashboard-server.yml" ${DASHBOARD_SERVER_PARAMS} | oc create -f -
+
+
+if [[ "${FRONTEND_MINI}" = "true" ]]; then
+    DASHBOARD_UI_PARAMS="IMAGE_REPOSITORY=quay.io/${QUAY_ORG}/2020-dashboard-ui:latest \
+    -p REPLICAS=1 \
+    -p CONTAINER_REQUEST_CPU=100m \
+    -p CONTAINER_REQUEST_MEMORY=100Mi"
+else
+    DASHBOARD_UI_PARAMS="-p REPLICAS=2"
+fi
+oc process -f "${DIR}/dashboard-ui.yml" ${DASHBOARD_UI_PARAMS} | oc create -f -
+

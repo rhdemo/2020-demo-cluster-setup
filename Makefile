@@ -7,10 +7,6 @@ export $(shell sed 's/=.*//' ${ENV_FILE})
 oc_login:
 	oc login ${OC_URL} -u ${OC_USER} -p ${OC_PASSWORD} --insecure-skip-tls-verify=true
 
-.PHONY: frontend
-frontend: oc_login
-	./frontend/deploy.sh
-
 datagrid: oc_login
 	./datagrid/deploy.sh
 
@@ -19,3 +15,9 @@ kafka: oc_login
 
 kafka_mirror_maker: oc_login
 	./kafka/deploy-kafka-mirror-maker.sh
+
+scoring: oc_login
+	./scoring/deploy.sh
+
+frontend: oc_login
+	./frontend/deploy.sh
