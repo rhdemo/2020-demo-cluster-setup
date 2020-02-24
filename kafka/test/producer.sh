@@ -2,6 +2,8 @@
 
 # usage:
 # producer.sh <producer-name> <bootstrap-server> <topic> <message>
+# example:
+# producer.sh producer demo2020-kafka-bootstrap:9092 my-topic "Hello from demo2"
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 echo "DIR="$DIR
