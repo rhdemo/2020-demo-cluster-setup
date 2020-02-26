@@ -9,9 +9,6 @@ spec:
     listeners:
       plain: {}
       tls: {}
-      external:
-        type: loadbalancer
-        tls: false
     readinessProbe:
       initialDelaySeconds: 15
       timeoutSeconds: 5
