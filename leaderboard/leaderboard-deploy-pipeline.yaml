@@ -1,0 +1,47 @@
+---
+apiVersion: tekton.dev/v1alpha1 
+kind: Pipeline
+metadata:
+  name: leaderboard-deploy
+spec:
+  resources:
+    - name: app-source
+      type: git
+    - name: app-image
+      type: image
+  params:
+    - name: appName
+      description: The application name i.e. OpenShift/Kubernetes Deployment name
+    - name: applicationSrcDir
+      description: The source directory of the application within the source repository
+  tasks:
+    - name: build
+      taskRef:
+        name: buildah
+        kind: ClusterTask
+      resources:
+        inputs:
+          - name: source
+            resource: app-source
+        outputs:
+          - name: image
+            resource: app-image
+      params:
+        - name: BUILDER_IMAGE
+          value: 'quay.io/buildah/stable:v1.11.0'
+        - name: DOCKERFILE
+          value: ./Dockerfile
+        - name: TLSVERIFY
+          value: 'true'
+    - name: deploy
+      taskRef:
+        name: openshift-client
+        kind: ClusterTask
+      runAfter:
+        - build
+      params:
+        - name: ARGS
+          value:
+            - "rollout"
+            - "latest"
+            - "$(params.appName)"
