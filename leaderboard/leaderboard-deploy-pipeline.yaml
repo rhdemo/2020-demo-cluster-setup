@@ -14,10 +14,13 @@ spec:
       description: The application name i.e. OpenShift/Kubernetes Deployment name
     - name: applicationSrcDir
       description: The source directory of the application within the source repository
+    - name: mavenMirrorUrl
+      description: The maven mirror to use 
+      default: https://repo1.maven.apache.org
   tasks:
     - name: build
       taskRef:
-        name: buildah
+        name: s2i-java-8
         kind: ClusterTask
       resources:
         inputs:
@@ -27,12 +30,12 @@ spec:
           - name: image
             resource: app-image
       params:
-        - name: BUILDER_IMAGE
-          value: 'quay.io/buildah/stable:v1.11.0'
-        - name: DOCKERFILE
-          value: "$(params.applicationSrcDir)/Dockerfile"
+        - name: PATH_CONTEXT
+          value: "$(params.applicationSrcDir)"
         - name: TLSVERIFY
           value: 'true'
+        - name: MAVEN_MIRROR_URL
+          value: "$(params.mavenMirrorUrl)"
     - name: deploy
       taskRef:
         name: openshift-client
@@ -44,4 +47,4 @@ spec:
           value:
             - "rollout"
             - "latest"
-            - "$(params.appName)"
+            - "dc/$(params.appName)"

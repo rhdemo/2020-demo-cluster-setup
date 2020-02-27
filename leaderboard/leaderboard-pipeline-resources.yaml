@@ -36,9 +36,9 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource
 metadata:
-  name: leaderboard-mock-producer
+  name: leaderboard-mock-producer-image
 spec:
   type: image
   params:
     - name: url
-      value: "quay.io/redhatdemo/leaderboard-mock-producer"
+      value: "quay.io/redhatdemo/2020-leaderboard-mock-producer"

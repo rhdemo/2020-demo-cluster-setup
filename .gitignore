@@ -3,5 +3,3 @@
 
 # certs
 *.pem
-# ignore secrets
-leaderboard/**-secret.yaml

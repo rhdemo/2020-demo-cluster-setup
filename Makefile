@@ -23,4 +23,4 @@ frontend: oc_login
 	./frontend/deploy.sh
 
 leaderboard: oc_login
-	./leader/deploy.sh
+	./leaderboard/deploy.sh
