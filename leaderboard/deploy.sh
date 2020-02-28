@@ -39,17 +39,9 @@ oc patch sa -n $PROJECT pipeline \
 # Start leaderboard-mock-producer deployment
 oc process -f "${DIR}/leaderboard-aggregator.yaml" | oc create -f -
 tkn pipeline start leaderboard-deploy \
+  --param app=leaderboard-aggregator \
   --resource app-source=git-source \
   --resource app-image=leaderboard-aggregator-image \
   --param appName=leaderboard-aggregator \
   --param applicationSrcDir=leaderboard-aggregator \
-  --param mavenMirrorUrl="$MAVEN_MIRROR_URL"
-
-# Start leaderboard-mock-producer deployment
-oc process -f "${DIR}/leaderboard-mock-producer.yaml" | oc create -f -
-tkn pipeline start leaderboard-deploy \
-  --resource app-source=git-source \
-  --resource app-image=leaderboard-mock-producer-image \
-  --param appName=leaderboard-mock-producer \
-  --param applicationSrcDir=leaderboard-mock-producer \
-  --param mavenMirrorUrl="$MAVEN_MIRROR_URL"
+  --param mavenMirrorUrl="$MAVEN_MIRROR_URL" 
