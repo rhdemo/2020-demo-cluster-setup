@@ -1,18 +1,11 @@
 #!/bin/bash
 
 NAMESPACE=${KAFKA_NAMESPACE:-kafka-demo}
+OLM_INSTALL=${KAFKA_OLM_INSTALL:-false}
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
-function check_openshift_4 {
-  if oc api-resources >/dev/null; then
-    oc api-resources | grep machineconfigs | grep machineconfiguration.openshift.io > /dev/null 2>&1
-  else
-    (oc get ns openshift && oc version | tail -1 | grep "v1.16") >/dev/null 2>&1
-  fi
-}
-
-if check_openshift_4; then
-    echo "Detected OpenShift 4 - Installing Strimzi via OLM"
+if [ "$OLM_INSTALL" == "true" ]; then
+    echo "Installing Strimzi via OLM"
 
     # reference: https://github.com/operator-framework/operator-marketplace/blob/master/README.md#installing-an-operator-using-marketplace
 
@@ -28,7 +21,7 @@ if check_openshift_4; then
     rm $DIR/strimzi/$NAMESPACE-catalog-source-config.yaml
     rm $DIR/strimzi/$NAMESPACE-subscription.yaml
 else
-    echo "OpenShift older than 4 - Installing Strimzi via release"
+    echo "Installing Strimzi via release"
 
     # download Strimzi release
     wget https://github.com/strimzi/strimzi-kafka-operator/releases/download/$KAFKA_OPERATOR_VERSION/strimzi-$KAFKA_OPERATOR_VERSION.tar.gz
