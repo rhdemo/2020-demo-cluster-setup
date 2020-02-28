@@ -1,16 +1,9 @@
 #!/bin/bash
 
 NAMESPACE=${KAFKA_NAMESPACE:-kafka-demo}
+OLM_INSTALL=${KAFKA_OLM_INSTALL:-false}
 
-function check_openshift_4 {
-  if oc api-resources >/dev/null; then
-    oc api-resources | grep machineconfigs | grep machineconfiguration.openshift.io > /dev/null 2>&1
-  else
-    (oc get ns openshift && oc version | tail -1 | grep "v1.16") >/dev/null 2>&1
-  fi
-}
-
-if check_openshift_4; then
+if [ "$OLM_INSTALL" == "true" ]; then
     # uninstall operator
     oc delete subscriptions.operators.coreos.com strimzi-kafka-operator -n $NAMESPACE
     oc delete clusterserviceversion strimzi-cluster-operator.v0.11.1 -n $NAMESPACE
