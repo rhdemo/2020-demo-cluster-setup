@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  generateName: leaderboard-deploy-run-
+spec:
+  podTemplate:
+  
+  params:
+  - name: applicationSrcDir
+    value: leaderboard-mock-producer
+  - name: mavenMirrorUrl
+    value: ""
+  - name: appName
+    value: leaderboard-mock-producer
+  pipelineRef:
+    name: leaderboard-deploy
+  resources:
+  - name: app-source
+    resourceRef:
+      name: git-source
+  - name: app-image
+    resourceRef:
+      name: leaderboard-mock-producer-image
+  serviceAccountName: pipeline

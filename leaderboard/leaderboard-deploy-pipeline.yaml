@@ -17,25 +17,27 @@ spec:
     - name: mavenMirrorUrl
       description: The maven mirror to use 
       default: https://repo1.maven.apache.org
+    - name: dockerFile
+      description: Parameter Description
+      default: Dockerfile.jvm   
   tasks:
     - name: build
       taskRef:
-        name: s2i-java-8
-        kind: ClusterTask
+        name: build-quarkus-app
       resources:
         inputs:
           - name: source
             resource: app-source
         outputs:
-          - name: image
+          - name: builtImage
             resource: app-image
       params:
-        - name: PATH_CONTEXT
+        - name: contextDir
           value: "$(params.applicationSrcDir)"
-        - name: TLSVERIFY
-          value: 'true'
-        - name: MAVEN_MIRROR_URL
+        - name: mavenMirrorUrl
           value: "$(params.mavenMirrorUrl)"
+        - name: dockerFile
+          value: "$(params.dockerFile)"
     - name: deploy
       taskRef:
         name: openshift-client
