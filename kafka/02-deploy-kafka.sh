@@ -30,31 +30,33 @@ do
 done
 echo "...Zookeeper cluster ready"
 
-# waiting for the LB address 
-echo "Waiting LB address for $CLUSTER-kafka-external-bootstrap service..."
-lbAddress=""
-while [ -z "$lbAddress" ]
-do
-    lbAddress=$(oc get svc $CLUSTER-kafka-external-bootstrap -o jsonpath='{.status.loadBalancer.ingress[].hostname}')
-    echo "... $lbAddress"
-    sleep 5
-done
-echo "...LB address for $CLUSTER-kafka-external-bootstrap service ready"
-
 kReplicas=$(oc get kafka $CLUSTER -o jsonpath="{.spec.kafka.replicas}" -n $NAMESPACE)
 
-for ((i=0; i<kReplicas; i++))
-do
-    echo "Waiting LB address for $CLUSTER-kafka-$i service..."
+# waiting for the LB address
+if [ "$EXPOSE" == "true" ]; then
+    echo "Waiting LB address for $CLUSTER-kafka-external-bootstrap service..."
     lbAddress=""
     while [ -z "$lbAddress" ]
     do
-        lbAddress=$(oc get svc $CLUSTER-kafka-$i -o jsonpath='{.status.loadBalancer.ingress[].hostname}')
+        lbAddress=$(oc get svc $CLUSTER-kafka-external-bootstrap -o jsonpath='{.status.loadBalancer.ingress[].hostname}')
         echo "... $lbAddress"
         sleep 5
     done
-    echo "...LB address for $CLUSTER-kafka-$i service ready"
-done
+    echo "...LB address for $CLUSTER-kafka-external-bootstrap service ready"
+
+    for ((i=0; i<kReplicas; i++))
+    do
+        echo "Waiting LB address for $CLUSTER-kafka-$i service..."
+        lbAddress=""
+        while [ -z "$lbAddress" ]
+        do
+            lbAddress=$(oc get svc $CLUSTER-kafka-$i -o jsonpath='{.status.loadBalancer.ingress[].hostname}')
+            echo "... $lbAddress"
+            sleep 5
+        done
+        echo "...LB address for $CLUSTER-kafka-$i service ready"
+    done
+fi
 
 # delay for allowing cluster operator to create the Kafka statefulset
 sleep 5
@@ -92,7 +94,9 @@ do
     sleep 2
 done
 
-# printing external access service for Kafka Mirror Maker
-svcExternalBootstrapHostname=$(oc get kafka $CLUSTER -o jsonpath='{.status.listeners[?(@.type == "external")].addresses[].host}')
-svcExternalBootstrapPort=$(oc get kafka $CLUSTER -o jsonpath='{.status.listeners[?(@.type == "external")].addresses[].port}')
-echo "$CLUSTER - svc external bootstrap: $svcExternalBootstrapHostname:$svcExternalBootstrapPort"
+if [ "$EXPOSE" == "true" ]; then
+    # printing external access service for Kafka Mirror Maker
+    svcExternalBootstrapHostname=$(oc get kafka $CLUSTER -o jsonpath='{.status.listeners[?(@.type == "external")].addresses[].host}')
+    svcExternalBootstrapPort=$(oc get kafka $CLUSTER -o jsonpath='{.status.listeners[?(@.type == "external")].addresses[].port}')
+    echo "$CLUSTER - svc external bootstrap: $svcExternalBootstrapHostname:$svcExternalBootstrapPort"
+fi
