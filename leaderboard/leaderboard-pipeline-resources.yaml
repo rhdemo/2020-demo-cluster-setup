@@ -1,0 +1,29 @@
+---
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  labels:
+    app: leaderboard-aggregator
+  name: leaderboard-aggregator
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: git-source
+spec:
+  type: git
+  params:
+    - name: url
+      value: https://github.com/rhdemo/2020-demo-leaderboard-service
+    - name: revision
+      value: draft-int-deployment
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: leaderboard-aggregator-image
+spec:
+  type: image
+  params:
+    - name: url
+      value: "quay.io/redhatdemo/2020-leaderboard-aggregator"

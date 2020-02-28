@@ -21,3 +21,6 @@ scoring: oc_login
 
 frontend: oc_login
 	./frontend/deploy.sh
+
+leaderboard: oc_login
+	./leaderboard/deploy.sh

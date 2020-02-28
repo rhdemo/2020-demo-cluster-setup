@@ -1,0 +1,52 @@
+---
+apiVersion: tekton.dev/v1alpha1 
+kind: Pipeline
+metadata:
+  name: leaderboard-deploy
+spec:
+  resources:
+    - name: app-source
+      type: git
+    - name: app-image
+      type: image
+  params:
+    - name: appName
+      description: The application name i.e. OpenShift/Kubernetes Deployment name
+    - name: applicationSrcDir
+      description: The source directory of the application within the source repository
+    - name: mavenMirrorUrl
+      description: The maven mirror to use 
+      default: https://repo1.maven.apache.org
+    - name: dockerFile
+      description: Parameter Description
+      default: Dockerfile.jvm   
+  tasks:
+    - name: build
+      taskRef:
+        name: build-quarkus-app
+      resources:
+        inputs:
+          - name: source
+            resource: app-source
+        outputs:
+          - name: builtImage
+            resource: app-image
+      params:
+        - name: contextDir
+          value: "$(params.applicationSrcDir)"
+        - name: mavenMirrorUrl
+          value: "$(params.mavenMirrorUrl)"
+        - name: dockerFile
+          value: "$(params.dockerFile)"
+    - name: deploy
+      taskRef:
+        name: openshift-client
+        kind: ClusterTask
+      runAfter:
+        - build
+      params:
+        - name: ARGS
+          value:
+            - "rollout"
+            - "latest"
+            - "dc/$(params.appName)"
