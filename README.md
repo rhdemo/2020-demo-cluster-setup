@@ -47,3 +47,5 @@ To deploy the Apache Kafka infrastructure:
 ```bash
 make kafka
 ```
+
+> In order to deploy Kafka, this version of the [yq](https://github.com/mikefarah/yq) tool is needed.
