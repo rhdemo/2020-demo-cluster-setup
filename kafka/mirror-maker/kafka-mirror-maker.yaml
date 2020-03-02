@@ -12,45 +12,11 @@ spec:
     status.storage.replication.factor: 1
   clusters:
   - alias: "hq"
-    bootstrapServers: my-cluster-kafka-bootstrap.myproject.svc:9092
+    bootstrapServers: demo2020-kafka-bootstrap.kafka-demo.svc:9092
   - alias: "demo2"
-    bootstrapServers: demo2-external-bootstrap-address:9094
-  - alias: "mcm1"
-    bootstrapServers: mcm1-external-bootstrap-address:9094
-  - alias: "aks"
-    bootstrapServers: aks-external-bootstrap-address:9094
+    bootstrapServers: ab2e966480b7142a3b51901c95f03efe-94907625.us-west-1.elb.amazonaws.com:9094
   mirrors:
   - sourceCluster: "demo2"
-    targetCluster: "hq"
-    sourceConnector:
-      config:
-        replication.factor: 1
-        offset-syncs.topic.replication.factor: 1
-        sync.topic.acls.enabled: "false"
-    heartbeatConnector:
-      config:
-        heartbeats.topic.replication.factor: 1
-    checkpointConnector:
-      config:
-        checkpoints.topic.replication.factor: 1
-    topicsPattern: ".*"
-    groupsPattern: ".*"
-  - sourceCluster: "mcm1"
-    targetCluster: "hq"
-    sourceConnector:
-      config:
-        replication.factor: 1
-        offset-syncs.topic.replication.factor: 1
-        sync.topic.acls.enabled: "false"
-    heartbeatConnector:
-      config:
-        heartbeats.topic.replication.factor: 1
-    checkpointConnector:
-      config:
-        checkpoints.topic.replication.factor: 1
-    topicsPattern: ".*"
-    groupsPattern: ".*"
-  - sourceCluster: "aks"
     targetCluster: "hq"
     sourceConnector:
       config:
