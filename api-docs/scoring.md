@@ -6,43 +6,73 @@
 ```json
 {
   "game": {
-    "id": "new-game-1582582052",
+    "id": "new-game-1583157438",
     "state": "active",
+    "date": "2020-03-02T13:57:18.000Z",
     "configuration": {}
   },
   "player": {
-    "id": "Luminous Quester",
-    "username": "Luminous Quester",
-    "score": 95
-  },
-  "item": {
-    "id": 1,
-    "price": [
-      8,
-      ".",
-      5,
-      5
-    ],
-    "answers": [
-      {
-        "format": "number"
-      },
-      {
-        "format": "decimal"
-      },
-      {
-        "format": "number"
-      },
-      {
-        "format": "number"
-      }
-    ]
+    "id": "Emerald Wanderer",
+    "username": "Emerald Wanderer",
+    "avatar": {
+      "body": 1,
+      "eyes": 3,
+      "mouth": 0,
+      "ears": 2,
+      "nose": 1,
+      "color": 3
+    },
+    "gameId": "new-game-1583157438",
+    "score": 0,
+    "right": 2,
+    "wrong": 1,
+    "lastRound": null,
+    "currentRound": {
+      "itemId": 0,
+      "choices": [
+        9,
+        null,
+        null,
+        5,
+        0,
+        1
+      ],
+      "answers": [
+        {
+          "format": "number",
+          "number": 1,
+          "from": 1,
+          "result": "correct"
+        },
+        {
+          "format": "decimal"
+        },
+        {
+          "format": "number",
+          "number": 5,
+          "from": 3,
+          "result": "incorrect"
+        },
+        {
+          "format": "number",
+          "number": 0,
+          "from": 2,
+          "result": "correct"
+        }
+      ],
+      "image": "/static/images/0.jpg",
+      "points": 95,
+      "correct": false
+    },
+    "creationServer": "SFO",
+    "gameServer": "SFO",
+    "scoringServer": "NY"
   },
   "answers": [
     {
       "format": "number",
-      "number": 8,
-      "from": 2,
+      "number": 1,
+      "from": 1,
       "result": "correct"
     },
     {
@@ -50,45 +80,107 @@
     },
     {
       "format": "number",
-      "number": 4,
-      "from": 1,
+      "number": 0,
+      "from": 4,
       "result": null
     },
     {
-      "format": "number"
+      "format": "number",
+      "number": 0,
+      "from": 2,
+      "result": "correct"
     }
-  ],
-  "pointsAvailable": 100
+  ]
 }
 ```
 
 #### Response Body
 ```json
 {
-  "answers": [
-    {
-      "format": "number",
-      "number": 8,
-      "from": 2,
-      "result": "correct"
+  "player": {
+    "id": "Emerald Wanderer",
+    "username": "Emerald Wanderer",
+    "avatar": {
+      "body": 1,
+      "eyes": 3,
+      "mouth": 0,
+      "ears": 2,
+      "nose": 1,
+      "color": 3
     },
-    {
-      "format": "decimal"
+    "gameId": "new-game-1583157438",
+    "creationServer": "SFO",
+    "gameServer": "SFO",
+    "scoringServer": "NY",
+    "score": 95,
+    "right": 3,
+    "wrong": 1,
+    "lastRound": {
+      "itemId": 0,
+      "choices": [
+        9,
+        null,
+        null,
+        5,
+        null,
+        1
+      ],
+      "answers": [
+        {
+          "format": "number",
+          "number": 1,
+          "from": 1,
+          "result": "correct"
+        },
+        {
+          "format": "decimal"
+        },
+        {
+          "format": "number",
+          "number": 0,
+          "from": 4,
+          "result": "correct"
+        },
+        {
+          "format": "number",
+          "number": 0,
+          "from": 2,
+          "result": "correct"
+        }
+      ],
+      "image": "/static/images/0.jpg",
+      "points": 95,
+      "correct": true
     },
-    {
-      "format": "number",
-      "number": 4,
-      "from": 1,
-      "result": "incorrect"
-    },
-    {
-      "format": "number"
+    "currentRound": {
+      "itemId": 1,
+      "choices": [
+        5,
+        4,
+        8,
+        5,
+        7,
+        8
+      ],
+      "answers": [
+        {
+          "format": "number"
+        },
+        {
+          "format": "decimal"
+        },
+        {
+          "format": "number"
+        },
+        {
+          "format": "number"
+        }
+      ],
+      "image": "/static/images/1.jpg",
+      "points": 100,
+      "correct": false
     }
-  ],
-  "pointsAvailable": 95,
-  "points": 0,
-  "correct": false,
-  "cluster": "US West 1"
+  }
 }
 ```
 
@@ -96,52 +188,24 @@
 Scoring Server -> Kafka mirrored to HQ
 ```json
 {
-  "game": {
-    "id": "new-game-1582548335",
-    "state": "active",
-    "date": "2020-02-24T12:45:35.000Z",
-    "configuration": {}
-  },
   "player": {
-    "id": "Forest Master",
-    "username": "Forest Master",
-    "score": 0
-  },
-  "item": {
-    "id": 0,
-    "name": "Dollar bill",
-    "price": [
-      1,
-      ".",
-      0,
-      0
-    ]
-  },
-  "transaction": {
-    "answers": [
-      {
-        "format": "number",
-        "number": 1,
-        "from": 1,
-        "result": "correct"
-      },
-      {
-        "format": "decimal"
-      },
-      {
-        "format": "number",
-        "number": 5,
-        "from": 3,
-        "result": "incorrect"
-      },
-      {
-        "format": "number"
-      }
-    ],
-    "pointsAvailable": 95,
-    "points": 0,
-    "correct": false,
-    "cluster": "US West 1"
+    "gameId": "new-game-1583157438",
+    "id": "Emerald Wanderer",
+    "username": "Emerald Wanderer",
+    "score": 95,
+    "right": 3,
+    "wrong": 1,
+    "avatar": {
+      "body": 1,
+      "eyes": 3,
+      "mouth": 0,
+      "ears": 2,
+      "nose": 1,
+      "color": 3
+    },
+    "creationServer": "SFO",
+    "gameServer": "NY",
+    "scoringServer": "NY"
   }
 }
 ```

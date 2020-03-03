@@ -26,7 +26,10 @@ parameters:
     value: "8080"
     required: true
   - name: SCORING_URL
-    value: "http://scoring-server:8080/scores"
+    value: "http://scoring-server:8080"
+    required: true
+  - name: CLUSTER_NAME
+    value: 'UNKN'
     required: true
 
 
@@ -43,3 +46,4 @@ objects:
       DATAGRID_CONSOLE_PORT: ${DATAGRID_CONSOLE_PORT}
       DATAGRID_CONSOLE_REST_PORT: ${DATAGRID_CONSOLE_REST_PORT}
       SCORING_URL: ${SCORING_URL}
+      CLUSTER_NAME: ${CLUSTER_NAME}
