@@ -41,6 +41,9 @@ parameters:
   - name: IMAGE_REPOSITORY
     value: quay.io/redhatdemo/2020-scoring-server:latest
     required: true
+  - name: CLUSTER_NAME
+    value: 'UNKN'
+    required: true
   - name: CONTAINER_REQUEST_CPU
     value: 200m
   - name: CONTAINER_REQUEST_MEMORY
@@ -62,6 +65,7 @@ objects:
       KAFKA_BROKER_LIST_HOST: ${KAFKA_BROKER_LIST_HOST}
       KAFKA_BROKER_LIST_PORT: ${KAFKA_BROKER_LIST_PORT}
       KAFKA_TRANSACTION_TOPIC: ${KAFKA_TRANSACTION_TOPIC}
+      CLUSTER_NAME: ${CLUSTER_NAME}
 
   - apiVersion: v1
     kind: DeploymentConfig
