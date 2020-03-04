@@ -1,0 +1,133 @@
+---
+kind: Template
+apiVersion: v1
+metadata:
+  name: digit-recognition-server
+  annotations:
+    description: Tensorflow Serving server
+    tags: tf-app
+objects:
+- kind: DeploymentConfig
+  apiVersion: v1
+  metadata:
+    name: "${APPLICATION_NAME}"
+    labels:
+      appTypes: tensorflow-serving-s2i
+      app: "${APPLICATION_NAME}"
+  spec:
+    strategy:
+      type: Rolling
+    triggers:
+    - type: ConfigChange
+    replicas: ${{REPLICAS}}
+    selector:
+      deploymentconfig: "${APPLICATION_NAME}"
+    template:
+      metadata:
+        labels:
+          deploymentconfig: "${APPLICATION_NAME}"
+          appTypes: tensorflow-serving-s2i
+          app: "${APPLICATION_NAME}"
+      spec:
+        containers:
+        - name: "${APPLICATION_NAME}"
+          image: "${IMAGE_REPOSITORY}"
+          imagePullPolicy: Always
+          env:
+          - name: PORT
+            value: "${PORT}"
+          - name: REST_PORT
+            value: "${REST_PORT}"
+          - name: MODEL_NAME
+            value: "${MODEL_NAME}"
+          - name: RUN_OPTIONS
+            value: "${RUN_OPTIONS}"
+          - name: TF_CPP_MIN_VLOG_LEVEL
+            value: "${TF_CPP_MIN_VLOG_LEVEL}"
+          - name: FILE_SYSTEM_POLL
+            value: "${FILE_SYSTEM_POLL}"
+          ports:
+          - containerPort: ${{PORT}}
+            protocol: TCP
+          - containerPort: ${{REST_PORT}}
+            protocol: TCP
+- apiVersion: v1
+  kind: Service
+  metadata:
+    name: ${APPLICATION_NAME}-grpc
+    labels:
+      appTypes: tensorflow-serving-s2i
+      app: ${APPLICATION_NAME}
+  spec:
+    ports:
+      - name: 8500-tcp
+        port: 8500
+        protocol: TCP
+        targetPort: 8500
+    selector:
+      deploymentconfig: ${APPLICATION_NAME}
+- kind: Service
+  apiVersion: v1
+  metadata:
+    name: "${APPLICATION_NAME}-rest"
+    labels:
+      appTypes: tensorflow-serving-s2i
+      app: "${APPLICATION_NAME}"
+  spec:
+    ports:
+    - name: "8501-tcp"
+      protocol: TCP
+      port: 8501
+      targetPort: 8501
+    selector:
+      deploymentconfig: "${APPLICATION_NAME}"
+- apiVersion: v1
+  kind: Route
+  metadata:
+    labels:
+      appTypes: tensorflow-serving-s2i
+      app: "${APPLICATION_NAME}"
+    name: ${APPLICATION_NAME}
+  spec:
+    port:
+      targetPort: 8501
+    to:
+      kind: Service
+      name: "${APPLICATION_NAME}-rest"
+parameters:
+- name: APPLICATION_NAME
+  description: The name of the application.
+  value: digit-recognition-server
+  from: "[a-zA-Z0-9]{10}"
+  required: true
+- name: REPLICAS
+  value: "1"
+  required: true
+- name: IMAGE_REPOSITORY
+  description: Name of the Image containing the model
+  value: quay.io/redhatdemo/2020-digit-recognition:latest
+  required: true
+- name: MODEL_NAME
+  description: 'Name of the model. ex: mnist'
+  value: mnist
+  required: true
+- name: RUN_OPTIONS
+  description: Additional options for tensorflow_model_server.
+  value: ''
+  required: false
+- name: PORT
+  description: Grpc Port
+  value: '8500'
+  required: true
+- name: REST_PORT
+  description: REST port
+  value: '8501'
+  required: true
+- name: TF_CPP_MIN_VLOG_LEVEL
+  description: debug level
+  value: '2'
+  required: true
+- name: FILE_SYSTEM_POLL
+  description: polling model changes
+  value: '30'
+  required: true

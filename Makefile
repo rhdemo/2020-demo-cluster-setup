@@ -24,3 +24,9 @@ frontend: oc_login
 
 leaderboard: oc_login
 	./leaderboard/deploy.sh
+
+ml: oc_login
+	./digit-recognition/deploy.sh
+
+ml-clean: oc_login
+	./digit-recognition/cleanup.sh
