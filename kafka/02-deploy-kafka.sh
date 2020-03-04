@@ -99,4 +99,5 @@ if [ "$EXPOSE" == "true" ]; then
     svcExternalBootstrapHostname=$(oc get kafka $CLUSTER -o jsonpath='{.status.listeners[?(@.type == "external")].addresses[].host}')
     svcExternalBootstrapPort=$(oc get kafka $CLUSTER -o jsonpath='{.status.listeners[?(@.type == "external")].addresses[].port}')
     echo "$CLUSTER - svc external bootstrap: $svcExternalBootstrapHostname:$svcExternalBootstrapPort"
+    echo "$OC_ALIAS=$svcExternalBootstrapHostname:$svcExternalBootstrapPort" >> $DIR/clusters.lbs
 fi

@@ -12,22 +12,5 @@ spec:
     status.storage.replication.factor: 1
   clusters:
   - alias: "hq"
-    bootstrapServers: demo2020-kafka-bootstrap.kafka-demo.svc:9092
-  - alias: "demo2"
-    bootstrapServers: ab2e966480b7142a3b51901c95f03efe-94907625.us-west-1.elb.amazonaws.com:9094
-  mirrors:
-  - sourceCluster: "demo2"
-    targetCluster: "hq"
-    sourceConnector:
-      config:
-        replication.factor: 1
-        offset-syncs.topic.replication.factor: 1
-        sync.topic.acls.enabled: "false"
-    heartbeatConnector:
-      config:
-        heartbeats.topic.replication.factor: 1
-    checkpointConnector:
-      config:
-        checkpoints.topic.replication.factor: 1
-    topicsPattern: ".*"
-    groupsPattern: ".*"
+    bootstrapServers: my-cluster-kafka-bootstrap:9092
+  mirrors: {}
