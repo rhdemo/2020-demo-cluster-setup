@@ -8,6 +8,10 @@ CLUSTER=${KAFKA_CLUSTER:-demo2020}
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 sed "s/my-mirror-maker-2/$CLUSTER-mirror-maker-2/" $DIR/mirror-maker/kafka-mirror-maker.yaml > $DIR/mirror-maker/$CLUSTER-kafka-mirror-maker.yaml
+sed -i "s/my-cluster/$CLUSTER/" $DIR/mirror-maker/$CLUSTER-kafka-mirror-maker.yaml
+
+# run script for configuring Kafka Mirror Maker
+. $DIR/kafka-mirror-maker-config.sh
 
 oc apply -f $DIR/mirror-maker/$CLUSTER-kafka-mirror-maker.yaml -n $NAMESPACE
 
