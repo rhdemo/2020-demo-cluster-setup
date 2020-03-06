@@ -13,7 +13,7 @@ do
     yq w -i $DIR/mirror-maker/$CLUSTER-kafka-mirror-maker.yaml spec.mirrors[$i].targetCluster hq
     yq w -i $DIR/mirror-maker/$CLUSTER-kafka-mirror-maker.yaml spec.mirrors[$i].sourceConnector.config[replication.factor] 1
     yq w -i $DIR/mirror-maker/$CLUSTER-kafka-mirror-maker.yaml spec.mirrors[$i].sourceConnector.config[offset-syncs.topic.replication.factor] 1
-    yq w -i $DIR/mirror-maker/$CLUSTER-kafka-mirror-maker.yaml spec.mirrors[$i].sourceConnector.config[sync.topic.acls.enabled] "\"false\""
+    yq w -i $DIR/mirror-maker/$CLUSTER-kafka-mirror-maker.yaml spec.mirrors[$i].sourceConnector.config[sync.topic.acls.enabled] false
     yq w -i $DIR/mirror-maker/$CLUSTER-kafka-mirror-maker.yaml spec.mirrors[$i].heartbeatConnector.config[heartbeats.topic.replication.factor] 1
     yq w -i $DIR/mirror-maker/$CLUSTER-kafka-mirror-maker.yaml spec.mirrors[$i].checkpointConnector.config[checkpoints.topic.replication.factor] 1
     yq w -i $DIR/mirror-maker/$CLUSTER-kafka-mirror-maker.yaml spec.mirrors[$i].topicsPattern ".*"
