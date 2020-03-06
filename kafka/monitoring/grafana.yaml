@@ -63,13 +63,13 @@ spec:
             port: 3000
           initialDelaySeconds: 15
           periodSeconds: 20
-        #resources:
-        #  requests:
-        #    cpu: "1"
-        #    memory: 512Mi
-        #  limits:
-        #    cpu: "1"
-        #    memory: 512Mi
+        resources:
+          requests:
+            cpu: "1"
+            memory: 512Mi
+          limits:
+            cpu: "1"
+            memory: 512Mi
       volumes:
       - name: grafana-data
         emptyDir: {}
