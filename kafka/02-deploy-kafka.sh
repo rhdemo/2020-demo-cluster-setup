@@ -38,7 +38,8 @@ if [ "$EXPOSE" == "true" ]; then
     lbAddress=""
     while [ -z "$lbAddress" ]
     do
-        lbAddress=$(oc get svc $CLUSTER-kafka-external-bootstrap -o jsonpath='{.status.loadBalancer.ingress[].hostname}')
+        # checking for ip or hostname (it would be different between AWS, GCP, Azure, ...)
+        lbAddress=$(oc get svc $CLUSTER-kafka-external-bootstrap -o jsonpath="{.status.loadBalancer.ingress[]['ip', 'hostname']}")
         echo "... $lbAddress"
         sleep 5
     done
@@ -50,7 +51,8 @@ if [ "$EXPOSE" == "true" ]; then
         lbAddress=""
         while [ -z "$lbAddress" ]
         do
-            lbAddress=$(oc get svc $CLUSTER-kafka-$i -o jsonpath='{.status.loadBalancer.ingress[].hostname}')
+            # checking for ip or hostname (it would be different between AWS, GCP, Azure, ...)
+            lbAddress=$(oc get svc $CLUSTER-kafka-$i -o jsonpath="{.status.loadBalancer.ingress[]['ip', 'hostname']}")
             echo "... $lbAddress"
             sleep 5
         done
@@ -90,14 +92,14 @@ rm $DIR/cluster/$CLUSTER-kafka-persistent-with-metrics.yaml
 kStatus="NotReady"
 while [ "$kStatus" != "Ready" ]
 do
-    kStatus=$(oc get kafka $CLUSTER -o jsonpath='{.status.conditions[].type}')
+    kStatus=$(oc get kafka $CLUSTER -o jsonpath="{.status.conditions[].type}")
     sleep 2
 done
 
 if [ "$EXPOSE" == "true" ]; then
     # printing external access service for Kafka Mirror Maker
-    svcExternalBootstrapHostname=$(oc get kafka $CLUSTER -o jsonpath='{.status.listeners[?(@.type == "external")].addresses[].host}')
-    svcExternalBootstrapPort=$(oc get kafka $CLUSTER -o jsonpath='{.status.listeners[?(@.type == "external")].addresses[].port}')
+    svcExternalBootstrapHostname=$(oc get kafka $CLUSTER -o jsonpath="{.status.listeners[?(@.type == 'external')].addresses[].host}")
+    svcExternalBootstrapPort=$(oc get kafka $CLUSTER -o jsonpath="{.status.listeners[?(@.type == 'external')].addresses[].port}")
     echo "$CLUSTER - svc external bootstrap: $svcExternalBootstrapHostname:$svcExternalBootstrapPort"
     echo "$OC_ALIAS=$svcExternalBootstrapHostname:$svcExternalBootstrapPort" >> $DIR/clusters.lbs
 fi
