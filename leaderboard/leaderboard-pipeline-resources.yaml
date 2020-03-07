@@ -16,7 +16,7 @@ spec:
     - name: url
       value: https://github.com/rhdemo/2020-demo-leaderboard-service
     - name: revision
-      value: draft-int-deployment
+      value: master
 ---
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineResource
