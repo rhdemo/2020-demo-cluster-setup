@@ -22,5 +22,8 @@ do
     # jump to i=1 for updating clusters (i=0 is for hq)
     ((i++))
     yq w -i $DIR/mirror-maker/$CLUSTER-kafka-mirror-maker.yaml spec.clusters[$i].alias $key
-    yq w -i $DIR/mirror-maker/$CLUSTER-kafka-mirror-maker.yaml spec.clusters[$i].bootstrapServers $value    
+    yq w -i $DIR/mirror-maker/$CLUSTER-kafka-mirror-maker.yaml spec.clusters[$i].bootstrapServers $value
+    yq w -i $DIR/mirror-maker/$CLUSTER-kafka-mirror-maker.yaml spec.clusters[$i].config[config.storage.replication.factor] 1
+    yq w -i $DIR/mirror-maker/$CLUSTER-kafka-mirror-maker.yaml spec.clusters[$i].config[offset.storage.replication.factor] 1
+    yq w -i $DIR/mirror-maker/$CLUSTER-kafka-mirror-maker.yaml spec.clusters[$i].config[status.storage.replication.factor] 1
 done < "$lbs"
