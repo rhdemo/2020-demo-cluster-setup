@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+createTopics::run() {
+  header_text "\n\n######## leaderboard::deploy:: Create Leaderboard Topics ########\n"
+  oc create -n "$(kafkanamespace)" -f "$(configdir)/topics.yaml"
+}
+
+createTopics::usage(){
+  echo "No parameters"
+}
+
+createTopics::clean(){
+  echo "Not implemented"
+}
+
+createTopics::description(){
+  echo "Creates Leaderboard Topics"
+}
