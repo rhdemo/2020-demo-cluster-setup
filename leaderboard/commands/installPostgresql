@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+installPostgresql::run() {
+ header_text "Deploying PostgeSQL"
+ POSTGRESQL_PARAMS="POSTGRESQL_USER=demo \
+    -p POSTGRESQL_PASSWORD=password! \
+    -p POSTGRESQL_DATABASE=gamedb"  
+ oc process -n openshift postgresql-persistent $POSTGRESQL_PARAMS | oc apply -n"$(project)" -f -
+ oc process -f  "$(configdir)/db-adminer.yaml" | oc apply -n"$(project)" -f -
+ 
+ sleep 5; while echo && oc get pods -n "$(project)" --selector=deploymentconfig=postgresql \
+   | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
+}
+
+installPostgresql::usage(){
+  echo "No parameters"
+}
+
+installPostgresql::clean(){
+  echo "Not implemented"
+}
+
+installPostgresql::description(){
+  echo "Installs PostgreSQL Persistent Template"
+}

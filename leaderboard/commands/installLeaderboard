@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+installLeaderboard::run() {
+  header_text "\n\n######## leaderboard::deploy:: Install Leaderboard Aggregator ########\n"
+  LEADER_PARAMS="REPLICAS=3"  
+  oc process -f "$(configdir)/leaderboard-aggregator.yaml" $LEADER_PARAMS | oc apply -n "$(project)" -f -
+}
+
+installLeaderboard::usage(){
+  echo "No parameters"
+}
+
+installLeaderboard::clean(){
+  echo "WIP"
+}
+
+installLeaderboard::description(){
+  echo "Install Leaderboard Applications"
+}

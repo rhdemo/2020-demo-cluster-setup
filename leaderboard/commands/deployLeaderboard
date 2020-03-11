@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+deployLeaderboard::run() {
+  header_text "\n\n######## leaderboard::deploy:: Deploying Leaderboard Aggregator ########\n"
+  tkn pipeline start  leaderboard-deploy \
+   --namespace "$(project)" \
+   --param appName=leaderboard-aggregator \
+   --resource app-source=git-source \
+   --resource app-image=leaderboard-aggregator-image \
+   --param appName=leaderboard-aggregator \
+   --param applicationSrcDir=leaderboard-aggregator \
+   --param mavenMirrorUrl="$MAVEN_MIRROR_URL" 
+}
+
+deployLeaderboard::usage(){
+  echo "No parameters"
+}
+
+deployLeaderboard::clean(){
+  echo "WIP"
+}
+
+deployLeaderboard::description(){
+  echo "Deploy Leaderboard Applications"
+}
