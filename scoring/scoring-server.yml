@@ -11,8 +11,8 @@ parameters:
   - name: APPLICATION_NAME
     value: scoring-server
     required: true
-  - name: SECRET_NAME
-    value: scoring-server-secret
+  - name: CONFIG_MAP_NAME
+    value: scoring-server
     required: true
   - name: DATAGRID_HOST
     value: datagrid-service.datagrid-demo.svc.cluster.local
@@ -55,11 +55,10 @@ parameters:
 
 objects:
   - apiVersion: v1
-    kind: Secret
+    kind: ConfigMap
     metadata:
-      name: ${SECRET_NAME}
+      name: ${CONFIG_MAP_NAME}
     data:
-    stringData:
       DATAGRID_HOST: ${DATAGRID_HOST}
       DATAGRID_HOTROD_PORT: ${DATAGRID_HOTROD_PORT}
       KAFKA_BROKER_LIST_HOST: ${KAFKA_BROKER_LIST_HOST}
@@ -92,8 +91,8 @@ objects:
                 - name: PORT
                   value: "${PORT}"
               envFrom:
-                - secretRef:
-                    name: ${SECRET_NAME}
+                - configMapRef:
+                    name: ${CONFIG_MAP_NAME}
               image: ${IMAGE_REPOSITORY}
               imagePullPolicy: Always
               name: ${APPLICATION_NAME}

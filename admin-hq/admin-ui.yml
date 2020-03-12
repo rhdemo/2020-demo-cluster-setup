@@ -9,7 +9,7 @@ parameters:
     value: admin-ui
     required: true
   - name: ROUTE_NAME
-    value: admin
+    value: ui
     required: true
   - name: REPLICAS
     value: "1"
