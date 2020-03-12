@@ -19,6 +19,9 @@ kafka_mirror_maker: oc_login
 scoring: oc_login
 	./scoring/deploy.sh
 
+quarkus_scoring: oc_login
+	./quarkus-scoring/deploy.sh
+
 frontend: oc_login
 	./frontend/deploy.sh
 
