@@ -11,6 +11,16 @@ CLUSTER_NAME=${CLUSTER_NAME:-HQ}
 
 oc project ${PROJECT} 2> /dev/null || oc new-project ${PROJECT}
 
+echo "Deploying the Skupper Network"
+##
+## To install skupper locally:
+##    curl -fL https://github.com/skupperproject/skupper-cli/releases/download/0.1.0/skupper-cli-0.1.0-linux-amd64.tgz | tar -xzf -
+##
+## This places the skupper executable in the current directory.  Move the executable to a location that is in the execution path.
+##
+
+skupper init --enable-router-console --router-console-auth openshift --id HQ
+
 echo "Deploying Admin HQ Applications"
 
 oc process -f "${DIR}/admin-config.yml" -p CLUSTER_NAME=${CLUSTER_NAME} | oc create -f -
