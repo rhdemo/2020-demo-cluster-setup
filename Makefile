@@ -16,11 +16,11 @@ kafka: oc_login
 kafka_mirror_maker: oc_login
 	./kafka/deploy-kafka-mirror-maker.sh
 
-scoring: oc_login
-	./scoring/deploy.sh
+admin: oc_login
+	./admin-hq/deploy.sh
 
-frontend: oc_login
-	./frontend/deploy.sh
+admin-undeploy: oc_login
+	./admin-hq/undeploy.sh
 
 leaderboard: oc_login
 	./leaderboard/deploy.sh
@@ -28,8 +28,17 @@ leaderboard: oc_login
 visualization: oc_login
 	./visualization/deploy.sh
 
-admin: oc_login
-	./admin-hq/deploy.sh
+scoring: oc_login
+	./scoring/deploy.sh
+
+scoring-undeploy: oc_login
+	./scoring/undeploy.sh
+
+frontend: oc_login
+	./frontend/deploy.sh
+
+frontend-undeploy: oc_login
+	./frontend/undeploy.sh
 
 ml: oc_login
 	./digit-recognition/deploy.sh

@@ -25,14 +25,12 @@ Also add a short description to this `README.md`
 
 ## Front End Applications and Socket Servers
 To configure an admin password, set the `ADMIN_PASSWORD` in the `.env` file.
-To configure the training application, set the appropriate s3 environment variables
-for your s3 bucket as shown in the `.env.example`.  Leaving the s3 variables 
-will run the frontend without saving the training data to s3.
+for the frontend to show the currently connected cluster, set the `CLUSTER_NAME` in the `.env` file.
 ```
 make frontend
 ```
-Game UI: http://game-frontend.cluster-host
-Admin UI: http://admin-frontend.cluster-host (blank password unless `ADMIN_PASSWORD` was set in the .env file)
+Game UI: http://game-frontend.edge-host
+Admin UI: http://ui-admin-hq.hub-host (blank password unless `ADMIN_PASSWORD` was set in the .env file)
 
 ## Strimzi and Apache Kafka
 
