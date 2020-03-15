@@ -9,7 +9,7 @@ parameters:
     value: leaderboard-ui
     required: true
   - name: ROUTE_NAME
-    value: leaderboard
+    value: ui
     required: true
   - name: REPLICAS
     value: "3"
