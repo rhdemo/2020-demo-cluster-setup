@@ -3,13 +3,25 @@
 # reset the offset for a consumer group on a topic to the latest one
 #
 # usage:
-# reset-tolatest.sh <consumer-group> <topic>
+# reset-tolatest.sh -g <consumer-group> -t <topic>
 
 NAMESPACE=${KAFKA_NAMESPACE:-kafka-demo}
 CLUSTER=${KAFKA_CLUSTER:-demo2020}
 
-CONSUMER_GROUP=$1
-TOPIC=$2
+# default values
+CONSUMER_GROUP=my-group
+TOPIC=my-topic
+
+while getopts g:t: option
+do
+    case ${option} in
+        g) CONSUMER_GROUP=${OPTARG};;
+        t) TOPIC=${OPTARG};;
+    esac
+done
+
+echo "CONSUMER_GROUP=$CONSUMER_GROUP"
+echo "TOPIC=$TOPIC"
 
 echo "Current status for consumer group [$CONSUMER_GROUP] ..."
 oc exec $CLUSTER-kafka-0 -c kafka -n $NAMESPACE -- bin/kafka-consumer-groups.sh \
