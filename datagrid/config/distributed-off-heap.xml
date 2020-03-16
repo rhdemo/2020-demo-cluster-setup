@@ -1,6 +1,6 @@
 <infinispan>
     <cache-container>
-        <distributed-cache-configuration name="distributed-off-heap">
+        <distributed-cache-configuration name="distributed-off-heap" statistics="true">
             <memory>
                 <off-heap/>
             </memory>

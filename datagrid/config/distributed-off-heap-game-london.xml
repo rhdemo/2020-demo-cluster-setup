@@ -1,6 +1,6 @@
 <infinispan>
     <cache-container>
-        <distributed-cache-configuration name="distributed-off-heap">
+        <distributed-cache-configuration name="distributed-off-heap" statistics="true">
             <encoding>
                 <key media-type="application/x-java-object; type=java.lang.String"/>
                 <value media-type="application/json"/>
