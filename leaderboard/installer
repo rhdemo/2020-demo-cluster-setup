@@ -136,7 +136,7 @@ quayorg() {
 # Read in some helpers
 source $(basedir)/helpers.sh
 
-header_text "Using kubeconfig '$KUBECONFIG'"
+header_text "\nUsing kubeconfig '$KUBECONFIG'\n"
 
 if $(hasflag --verbose -v); then
     export PS4='+($(basename ${BASH_SOURCE[0]}):${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'

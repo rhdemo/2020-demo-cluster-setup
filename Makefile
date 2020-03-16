@@ -22,8 +22,32 @@ admin: oc_login
 admin-undeploy: oc_login
 	./admin-hq/undeploy.sh
 
-leaderboard: oc_login
-	./leaderboard/deploy.sh
+leaderboard_project:	oc_login
+	./leaderboard/installer createProjects
+
+leaderboard_postgresql:	oc_login
+	./leaderboard/installer installPostgresql
+
+leaderboard_nexus:	oc_login
+	./leaderboard/installer installNexus
+
+leaderboard_pipelines:	oc_login
+	./leaderboard/installer installPipelines
+
+leaderboard_topics:	oc_login
+	./leaderboard/installer createTopics
+
+leaderboard_install_api:
+	./leaderboard/installer installLeaderboardAPI
+
+leaderboard_deploy_api:	leaderboard_install_api
+	./leaderboard/installer deployLeaderboardAPI
+
+leaderboard_install_aggregator:	
+	./leaderboard/installer installLeaderboard
+
+leaderboard_deploy_aggregator:
+	./leaderboard/installer deployLeaderboard
 
 visualization: oc_login
 	./visualization/deploy.sh

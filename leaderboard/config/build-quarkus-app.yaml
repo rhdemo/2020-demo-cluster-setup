@@ -32,12 +32,11 @@ spec:
   steps:
     - name: build-sources
       image: quay.io/quarkus/centos-quarkus-maven:19.3.1-java8
-      workingDir: "/workspace/source/$(inputs.params.contextDir)"
-      args:
-        - mvn
-        - -DskipTests
-        - clean
-        - package
+      workingDir: "/workspace/source"
+      script: |
+        #!/usr/bin/env bash
+        /usr/local/bin/entrypoint-run.sh
+        mvn -Prelease clean install
       env:
         - name: HOME
           value: /home/quarkus
