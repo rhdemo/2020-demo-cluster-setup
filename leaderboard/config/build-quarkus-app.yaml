@@ -19,7 +19,7 @@ spec:
         default: "$(outputs.resources.builtImage.url)"
       - name: dockerFile
         description: Parameter Description
-        default: Dockerfile.jvm   
+        default: Dockerfile.jvm
   outputs:
     resources:
       - name: builtImage
@@ -86,7 +86,7 @@ spec:
           "push",
           "--tls-verify=true",
           "$(inputs.params.destinationImage)",
-          "docker://$(inputs.params.destinationImage)"
+          "docker://$(inputs.params.destinationImage)",
         ]
       securityContext:
         privileged: true

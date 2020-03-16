@@ -1,5 +1,5 @@
 ---
-apiVersion: tekton.dev/v1alpha1 
+apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
   name: leaderboard-deploy
@@ -15,11 +15,11 @@ spec:
     - name: applicationSrcDir
       description: The source directory of the application within the source repository
     - name: mavenMirrorUrl
-      description: The maven mirror to use 
+      description: The maven mirror to use
       default: https://repo1.maven.apache.org
     - name: dockerFile
       description: Parameter Description
-      default: Dockerfile.jvm   
+      default: Dockerfile.jvm
   tasks:
     - name: build
       taskRef:

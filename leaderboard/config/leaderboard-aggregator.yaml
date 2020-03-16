@@ -63,9 +63,15 @@ objects:
                 limits:
                   cpu: ${CONTAINER_LIMIT_CPU}
                   memory: ${CONTAINER_LIMIT_MEMORY}
+              volumeMounts:
+                - mountPath: /etc/messaging
+                  name: skupper-amqp-trust
+        volumes:
+          - name: skupper-amqp-trust
+            secret:
+              secretName: skupper
       triggers:
         - type: ConfigChange
-
   - apiVersion: v1
     kind: Service
     metadata:
