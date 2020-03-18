@@ -45,6 +45,6 @@ yq w -i $DIR/consumer-deployment.yaml spec.template.spec.containers[0].env.name=
 yq w -i $DIR/consumer-deployment.yaml spec.template.spec.containers[0].env.name==TOPIC.value $TOPIC
 yq w -i $DIR/consumer-deployment.yaml spec.template.spec.containers[0].env.name==GROUP_ID.value $GROUP_ID
 
-#oc apply -f $DIR/consumer-deployment.yaml
+oc apply -f $DIR/consumer-deployment.yaml
 
-#rm $DIR/consumer-deployment.yaml
+rm $DIR/consumer-deployment.yaml
