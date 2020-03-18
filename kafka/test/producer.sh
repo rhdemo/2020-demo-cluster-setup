@@ -51,6 +51,6 @@ yq w -i $DIR/producer-deployment.yaml spec.template.spec.containers[0].env.name=
 #yq w -i $DIR/producer-deployment.yaml spec.template.spec.containers[0].env.name==MESSAGE.value $MESSAGE
 sed -i "s/message/\"$MESSAGE\"/" $DIR/producer-deployment.yaml
 
-#oc apply -f $DIR/producer-deployment.yaml
+oc apply -f $DIR/producer-deployment.yaml
 
-#rm $DIR/producer-deployment.yaml
+rm $DIR/producer-deployment.yaml
