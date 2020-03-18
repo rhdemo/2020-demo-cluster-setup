@@ -30,6 +30,9 @@ parameters:
     value: game.sysdeseng.com
   - name: PUBLIC_NAME
     value: game-sysdeseng
+  - name: ROLLOUT_STRATEGY
+    value: "Rolling"
+    required: true
 
 objects:
   - apiVersion: v1
@@ -44,9 +47,7 @@ objects:
       selector:
         app: ${APPLICATION_NAME}
       strategy:
-        rollingParams:
-          timeoutSeconds: 3600
-        type: Rolling
+        type: ${ROLLOUT_STRATEGY}
       template:
         metadata:
           labels:
