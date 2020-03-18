@@ -7,6 +7,7 @@ KEY_FILE=${KEY_FILE:-prod-key.pem}
 CERTIFICATE_FILE=${CERTIFICATE_FILE:-prod-cert.pem}
 CA_FILE=${CA_FILE:-prod-ca.pem}
 CLUSTER_NAME=${CLUSTER_NAME:-EDGE}
+ROLLOUT_STRATEGY=${ROLLOUT_STRATEGY:-Rolling}
 
 oc project ${PROJECT} 2> /dev/null || oc new-project ${PROJECT}
 
@@ -22,7 +23,7 @@ echo "Deploying the Skupper Network"
 skupper init --id ${CLUSTER_NAME}
 
 oc process -f "${DIR}/admin-edge.yml" | oc create -f -
-oc process -f "${DIR}/phone-server.yml"  | oc create -f -
-oc process -f "${DIR}/phone-ui.yml" | oc create -f -
+oc process -f "${DIR}/phone-server.yml" -p ROLLOUT_STRATEGY=${ROLLOUT_STRATEGY} | oc create -f -
+oc process -f "${DIR}/phone-ui.yml"  -p ROLLOUT_STRATEGY=${ROLLOUT_STRATEGY} | oc create -f -
 
 skupper connect "${DIR}/../.secrets/hq.yml"

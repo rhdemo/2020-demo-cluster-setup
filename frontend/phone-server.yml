@@ -37,6 +37,10 @@ parameters:
     value: 1000m
   - name: CONTAINER_LIMIT_MEMORY
     value: 2000Mi
+  - name: ROLLOUT_STRATEGY
+    value: "Rolling"
+    required: true
+
 
 objects:
   - apiVersion: v1
@@ -50,7 +54,7 @@ objects:
       selector:
         deploymentconfig: ${APPLICATION_NAME}
       strategy:
-        type: Rolling
+        type: ${ROLLOUT_STRATEGY}
       template:
         metadata:
           labels:

@@ -45,3 +45,10 @@ ml: oc_login
 
 ml-clean: oc_login
 	./digit-recognition/cleanup.sh
+
+disconnect: oc_login
+	./frontend/disconnect.sh
+
+reconnect: oc_login
+	./frontend/reconnect.sh
+
