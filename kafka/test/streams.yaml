@@ -26,5 +26,7 @@ spec:
             value: source_topic
           - name: TARGET_TOPIC
             value: target_topic
+          - name: COMMIT_INTERVAL_MS
+            value: "5000"
           - name: LOG_LEVEL
             value: "INFO"
