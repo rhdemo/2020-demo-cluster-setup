@@ -2,7 +2,7 @@
 
 createTopics::run() {
   header_text "\n\n######## leaderboard::deploy:: Create Leaderboard Topics ########\n"
-  oc create -n "$(kafkanamespace)" -f "$(configdir)/topics.yaml"
+  oc create -n "$(kafkanamespace)" -f "$(configdir)/topics.yaml" || true
 }
 
 createTopics::usage(){

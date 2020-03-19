@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 createProjects::run() {
- oc new-project "$(project)" --description-"Leaderboard demo applications"
+ oc new-project "$(project)" --description="Leaderboard Demo Applications" || true
 }
 
 createProjects::usage(){

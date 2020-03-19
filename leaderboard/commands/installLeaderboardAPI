@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+installLeaderboardAPI::run() {
+  header_text "\n\n######## leaderboard::deploy:: Install Leaderboard API ########\n"  
+  LEADER_PARAMS="IMAGE_REPOSITORY=2020-leaderboard-aggregator \
+   -p REPLICAS=$LEADERBOARD_API_REPLICAS"
+  oc process -f "$(configdir)/leaderboard-api.yaml" $LEADER_PARAMS | oc apply -n "$(project)" -f -
+}
+
+installLeaderboardAPI::usage(){
+  echo "No parameters"
+}
+
+installLeaderboardAPI::clean(){
+  echo "WIP"
+}
+
+installLeaderboardAPI::description(){
+  echo "Install Leaderboard API"
+}

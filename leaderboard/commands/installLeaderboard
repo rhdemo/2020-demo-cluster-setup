@@ -1,9 +1,16 @@
 #!/usr/bin/env bash
 
 installLeaderboard::run() {
-  header_text "\n\n######## leaderboard::deploy:: Install Leaderboard Aggregator ########\n"
-  LEADER_PARAMS="REPLICAS=3"  
-  oc process -f "$(configdir)/leaderboard-aggregator.yaml" $LEADER_PARAMS | oc apply -n "$(project)" -f -
+  local appName="lbagg-"
+  IFS=',' read -ra edgeTopics <<< "$KAFKA_STREAMS_TOPICS"
+  for topic in "${edgeTopics[@]}"
+  do
+    header_text "\n\n######## leaderboard::deploy:: Install Leaderboard Aggregator:: $appName${topic/./-}  ########\n"
+    LEADER_PARAMS="REPLICAS=$LEADERBOARD_AGGREGATOR_REPLICAS \
+      -p APPLICATION_NAME=$appName${topic/./-} \
+      -p KAFKA_STREAMS_TOPIC=$topic"
+    oc process -f "$(configdir)/leaderboard-aggregator.yaml" $LEADER_PARAMS | oc apply -n "$(project)" -f -
+  done
 }
 
 installLeaderboard::usage(){
