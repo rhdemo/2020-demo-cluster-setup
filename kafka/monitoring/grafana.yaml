@@ -47,9 +47,9 @@ spec:
           readOnly: true
           subPath: strimzi-zookeeper-dashboard.json
         - name: grafana-config
-          mountPath: /var/lib/grafana/dashboards/strimzi-kafka-connect-dashboard.json
+          mountPath: /var/lib/grafana/dashboards/strimzi-kafka-mirror-maker-2-dashboard.json
           readOnly: true
-          subPath: strimzi-kafka-connect-dashboard.json
+          subPath: strimzi-kafka-mirror-maker-2-dashboard.json
         - name: grafana-config
           mountPath: /var/lib/grafana/dashboards/strimzi-kafka-exporter-dashboard.json
           readOnly: true
