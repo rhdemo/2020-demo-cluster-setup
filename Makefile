@@ -22,32 +22,53 @@ admin: oc_login
 admin-undeploy: oc_login
 	./admin-hq/undeploy.sh
 
-leaderboard_project:	oc_login
-	./leaderboard/installer createProjects
+leaderboard_login: 
+	./leaderboard/installer ocLogin
 
-leaderboard_postgresql:	oc_login
+leaderboard_project:	leaderboard_login
+	./leaderboard/installer createOrUseProject
+
+leaderboard_postgresql:	leaderboard_project
 	./leaderboard/installer installPostgresql
 
-leaderboard_nexus:	oc_login
+leaderboard_nexus:	leaderboard_project
 	./leaderboard/installer installNexus
 
-leaderboard_pipelines:	oc_login
+leaderboard_pipelines:	leaderboard_project
 	./leaderboard/installer installPipelines
 
-leaderboard_topics:	oc_login
+leaderboard_topics:
 	./leaderboard/installer createTopics
 
-leaderboard_install_api:
+leaderboard_install_api:	leaderboard_project
 	./leaderboard/installer installLeaderboardAPI
 
 leaderboard_deploy_api:	leaderboard_install_api
 	./leaderboard/installer deployLeaderboardAPI
 
-leaderboard_install_aggregator:	
+leaderboard_install_aggregator:		leaderboard_project
 	./leaderboard/installer installLeaderboard
 
-leaderboard_deploy_aggregator:
+leaderboard_deploy_aggregator:	leaderboard_install_aggregator
 	./leaderboard/installer deployLeaderboard
+
+leaderboard_install_messaging:	leaderboard_project
+	./leaderboard/installer installLeaderboardMessaging
+
+leaderboard_deploy_messaging:	leaderboard_install_messaging
+	./leaderboard/installer deployLeaderboardMessaging
+
+leaderboard_install_broadcast:		leaderboard_project
+	./leaderboard/installer installLeaderboardBroadcast
+
+leaderboard_deploy_broadcast:	leaderboard_install_broadcast
+	./leaderboard/installer deployLeaderboardBroadcast
+
+leaderboard_deploy_all:	leaderboard_project
+	leaderboard_deploy_api
+	leaderboard_deploy_aggregator
+	leaderboard_deploy_messaging
+	leaderboard_deploy_broadcast
 
 visualization: oc_login
 	./visualization/deploy.sh

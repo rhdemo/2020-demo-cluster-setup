@@ -1,14 +1,13 @@
 #!/usr/bin/env bash
 
-deployLeaderboard::run() {
-  header_text "\n\n######## leaderboard::deploy:: Deploying Leaderboard Aggregator ########\n"
-
+deployLeaderboardBroadcast::run() { 
+  header_text "\n\n######## leaderboard::deploy:: Deploying Leaderboard Broadcast ########\n"
   prRunName=$(tkn pipeline start  leaderboard-deploy \
    --namespace "$(project)" \
    --resource app-source=git-source \
-   --resource app-image=leaderboard-aggregator-image \
-   --param applicationSrcDir=leaderboard-aggregator \
-   --param mavenBuildCmd=mvn,-Paggregator,clean,install \
+   --resource app-image=leaderboard-broadcast-image \
+   --param applicationSrcDir=leaderboard-broadcast \
+    --param mavenBuildCmd=mvn,-Pbroadcast,clean,install \
    --param mavenMirrorUrl="$MAVEN_MIRROR_URL" \
     | awk 'NR==1{print $3}')
 
@@ -18,24 +17,24 @@ deployLeaderboard::run() {
       prStatus=$(oc get -n $(project) pipelinerun $prRunName -o jsonpath="{.status.conditions[].reason}")
       if [ "$prStatus" == "Failed" ];
       then
-        echo "ERROR:(LB-AGG-DEPLOY) Pipeline $prRunName failed"
+        echo "ERROR:(LB-BRD-DEPLOY) Pipeline $prRunName failed"
         tkn pr logs -L
         break;
       fi
       header_text "\n Waiting for pipeline $prRunName to complete \n"
       sleep 10
    done
-   header_text "\n Leaderboard Aggregator Pipeline completed \n"
+   header_text "\n Leaderboard Broadcast Pipeline completed \n"
 }
 
-deployLeaderboard::usage(){
+deployLeaderboardBroadcast::usage(){
   echo "No parameters"
 }
 
-deployLeaderboard::clean(){
+deployLeaderboardBroadcast::clean(){
   echo "WIP"
 }
 
-deployLeaderboard::description(){
-  echo "Deploy Leaderboard Applications"
+deployLeaderboardBroadcast::description(){
+  echo "Deploy Leaderboard Brodcast application"
 }

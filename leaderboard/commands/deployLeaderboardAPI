@@ -7,6 +7,7 @@ deployLeaderboardAPI::run() {
    --resource app-source=git-source \
    --resource app-image=leaderboard-api-image \
    --param applicationSrcDir=leaderboard-api \
+   --param mavenBuildCmd=mvn,-Papi,clean,install \
    --param mavenMirrorUrl="$MAVEN_MIRROR_URL" \
     | awk 'NR==1{print $3}')
 
@@ -23,6 +24,7 @@ deployLeaderboardAPI::run() {
       header_text "\n Waiting for pipeline $prRunName to complete \n"
       sleep 10
    done
+   header_text "\n Leaderboard API Pipeline completed \n"
 }
 
 deployLeaderboardAPI::usage(){
