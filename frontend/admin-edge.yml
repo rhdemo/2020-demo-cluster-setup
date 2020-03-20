@@ -21,7 +21,7 @@ parameters:
     value: 2020-demo-common
     required: true
   - name: REPLICAS
-    value: "5"
+    value: "2"
     required: true
   - name: PORT
     value: "8080"
