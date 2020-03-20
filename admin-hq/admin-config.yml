@@ -23,7 +23,7 @@ parameters:
     value: "11222"
     required: true
   - name: GAME_URL
-    value: "http://leaderboard-aggregator.leaderboard.svc.cluster.local:8080"
+    value: "http://leaderboard-api.leaderboard.svc.cluster.local:8080"
     required: true
   - name: CLUSTER_NAME
     value: 'HQ'
