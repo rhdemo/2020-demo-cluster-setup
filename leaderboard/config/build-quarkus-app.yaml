@@ -11,6 +11,13 @@ spec:
       - name: contextDir
         description: the context dir within source
         default: .
+      - name: mavenBuildCmd
+        description: The Maven build command to run
+        type: array
+        default:
+          - mvn
+          - clean
+          - install
       - name: mavenMirrorUrl
         description: the maven mirror url
         default: http://repo1.maven.apache.org/maven2
@@ -33,10 +40,10 @@ spec:
     - name: build-sources
       image: quay.io/quarkus/centos-quarkus-maven:19.3.1-java8
       workingDir: "/workspace/source"
-      script: |
-        #!/usr/bin/env bash
-        /usr/local/bin/entrypoint-run.sh
-        mvn -Prelease clean install
+      command:
+        - /usr/local/bin/entrypoint-run.sh
+      args:
+        - "$(inputs.params.mavenBuildCmd)"
       env:
         - name: HOME
           value: /home/quarkus

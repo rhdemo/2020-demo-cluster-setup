@@ -39,6 +39,7 @@ installPipelines::run() {
  header_text "\n\n######## leaderboard::deploy:: Create Pipeline Resources ########\n"
  oc apply -n "$(project)" \
     -f "$(configdir)/leaderboard-pipeline-resources.yaml" \
+    -f "$(configdir)/pipeline-conditions.yaml" \
     -f "$(configdir)/openshift-is-task.yaml" \
     -f "$(configdir)/build-quarkus-app.yaml" \
     -f "$(configdir)/leaderboard-deploy-pipeline.yaml"

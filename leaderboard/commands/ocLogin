@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+ocLogin::run() {
+ local oToken=$(oc whoami 2>&1)
+ if [[ "$oToken" =~ "Error" || "$oToken" =~ "error" ]]; then
+   header_text "\n Logging into the cluster\n"
+   oc login ${OC_URL} \
+     -u ${OC_USER} \
+     -p ${OC_PASSWORD} \
+     --insecure-skip-tls-verify=true
+ else
+    header_text "\n Already Logged in!\n "
+ fi 
+}
+
+ocLogin::usage(){
+  echo "No parameters"
+}
+
+ocLogin::clean(){
+  echo "Not implemented"
+}
+
+ocLogin::description(){
+  echo "Login to OpenShift Cluster"
+}

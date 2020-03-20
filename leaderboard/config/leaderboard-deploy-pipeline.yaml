@@ -1,29 +1,5 @@
 ---
 apiVersion: tekton.dev/v1alpha1
-kind: Condition
-metadata:
-  name: rollout-latest-aggregator
-spec:
-  params:
-    - name: "applicationSrcDir"
-  check:
-    # TODO update to UBI
-    image: alpine
-    script: '[[ "$(params.applicationSrcDir)" = "leaderboard-aggregator" ]] && echo "Rollout latest Leaderboard Aggregator"'
----
-apiVersion: tekton.dev/v1alpha1
-kind: Condition
-metadata:
-  name: rollout-latest-api
-spec:
-  params:
-    - name: "applicationSrcDir"
-  check:
-    # TODO update to UBI
-    image: alpine
-    script: '[[ "$(params.applicationSrcDir)" = "leaderboard-api" ]] && echo "Rollout latest Leaderboard API"'
----
-apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
   name: leaderboard-deploy
@@ -36,12 +12,18 @@ spec:
   params:
     - name: applicationSrcDir
       description: The source directory of the application within the source repository
+      type: string
+    - name: mavenBuildCmd
+      description: The Maven build command to run
+      type: array
     - name: mavenMirrorUrl
       description: The maven mirror to use
       default: https://repo1.maven.apache.org
+      type: string
     - name: dockerFile
       description: Parameter Description
       default: Dockerfile.jvm
+      type: string
   tasks:
     - name: build
       taskRef:
@@ -56,6 +38,9 @@ spec:
       params:
         - name: contextDir
           value: "$(params.applicationSrcDir)"
+        - name: mavenBuildCmd
+          value:
+            - "$(params.mavenBuildCmd)"
         - name: mavenMirrorUrl
           value: "$(params.mavenMirrorUrl)"
         - name: dockerFile
@@ -96,3 +81,39 @@ spec:
       params:
         - name: imageStreamName
           value: "2020-leaderboard-api"
+    - name: import-leaderboard-broadcast-is
+      conditions:
+        - conditionRef: rollout-latest-broadcast
+          params:
+            - name: "applicationSrcDir"
+              value: "$(params.applicationSrcDir)"
+      taskRef:
+        name: oc-import-image
+        kind: Task
+      resources:
+        inputs:
+          - name: appImage
+            resource: app-image
+            from:
+              - build
+      params:
+        - name: imageStreamName
+          value: "2020-leaderboard-broadcast"
+    - name: import-leaderboard-messaging-is
+      conditions:
+        - conditionRef: rollout-latest-messaging
+          params:
+            - name: "applicationSrcDir"
+              value: "$(params.applicationSrcDir)"
+      taskRef:
+        name: oc-import-image
+        kind: Task
+      resources:
+        inputs:
+          - name: appImage
+            resource: app-image
+            from:
+              - build
+      params:
+        - name: imageStreamName
+          value: "2020-leaderboard-messaging"
