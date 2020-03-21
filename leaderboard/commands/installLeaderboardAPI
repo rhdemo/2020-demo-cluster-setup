@@ -12,7 +12,10 @@ installLeaderboardAPI::usage(){
 }
 
 installLeaderboardAPI::clean(){
-  echo "WIP"
+ header_text "\n\n######## leaderboard::deploy:: Delete Leaderboard API ########\n"  
+  LEADER_PARAMS="IMAGE_REPOSITORY=2020-leaderboard-aggregator \
+   -p REPLICAS=$LEADERBOARD_API_REPLICAS"
+  oc process -f "$(configdir)/leaderboard-api.yaml" $LEADER_PARAMS | oc delete -n "$(project)" -f -
 }
 
 installLeaderboardAPI::description(){

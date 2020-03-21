@@ -22,7 +22,7 @@ spec:
       type: string
     - name: dockerFile
       description: Parameter Description
-      default: Dockerfile.jvm
+      default: Dockerfile.native
       type: string
   tasks:
     - name: build

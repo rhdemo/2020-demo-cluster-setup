@@ -25,7 +25,7 @@ createOrUseProject::usage(){
 }
 
 createOrUseProject::clean(){
-  echo "Not implemented"
+  oc delete project "$(project)"
 }
 
 createOrUseProject::description(){

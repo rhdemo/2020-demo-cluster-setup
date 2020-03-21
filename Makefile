@@ -43,20 +43,29 @@ leaderboard_topics:
 leaderboard_install_api:	leaderboard_project
 	./leaderboard/installer installLeaderboardAPI
 
-leaderboard_deploy_api:	leaderboard_install_api
+leaderboard_deploy_api:
 	./leaderboard/installer deployLeaderboardAPI
+
+leaderboard_uninstall_api:
+	./leaderboard/installer installLeaderboardAPI --clean
 
 leaderboard_install_aggregator:		leaderboard_project
 	./leaderboard/installer installLeaderboard
 
-leaderboard_deploy_aggregator:	leaderboard_install_aggregator
+leaderboard_uninstall_aggregator:
+	./leaderboard/installer installLeaderboard --clean
+
+leaderboard_deploy_aggregator:
 	./leaderboard/installer deployLeaderboard
 
 leaderboard_install_messaging:	leaderboard_project
 	./leaderboard/installer installLeaderboardMessaging
 
-leaderboard_deploy_messaging:	leaderboard_install_messaging
+leaderboard_deploy_messaging:
 	./leaderboard/installer deployLeaderboardMessaging
+
+leaderboard_uninstall_messaging:
+	./leaderboard/installer installLeaderboardMessaging --clean
 
 leaderboard_install_broadcast:		leaderboard_project
 	./leaderboard/installer installLeaderboardBroadcast
@@ -64,11 +73,26 @@ leaderboard_install_broadcast:		leaderboard_project
 leaderboard_deploy_broadcast:	leaderboard_install_broadcast
 	./leaderboard/installer deployLeaderboardBroadcast
 
-leaderboard_deploy_all:	leaderboard_project
+leaderboard_uninstall_broadcast:
+	./leaderboard/installer installLeaderboardBroadcast --clean
+
+leaderboard_install_all:	leaderboard_project
+	leaderboard_install_api
+	leaderboard_install_aggregator
+	leaderboard_install_messaging
+	leaderboard_install_broadcast
+
+leaderboard_deploy_all:	
 	leaderboard_deploy_api
 	leaderboard_deploy_aggregator
 	leaderboard_deploy_messaging
 	leaderboard_deploy_broadcast
+
+leaderboard_uninstall_all:
+	leaderboard_install_api --clean
+	leaderboard_install_aggregator --clean
+	leaderboard_install_messaging --clean
+	leaderboard_install_broadcast --clean
 
 visualization: oc_login
 	./visualization/deploy.sh
