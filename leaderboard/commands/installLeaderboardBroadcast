@@ -12,7 +12,10 @@ installLeaderboardBroadcast::usage(){
 }
 
 installLeaderboardBroadcast::clean(){
-  echo "WIP"
+  header_text "\n\n######## leaderboard::deploy:: Delete Leaderboard Broadcast ########\n"  
+  LEADER_PARAMS="IMAGE_REPOSITORY=2020-leaderboard-broadcast \
+   -p REPLICAS=$LEADERBOARD_BROADCAST_REPLICAS"
+  oc process -f "$(configdir)/leaderboard-broadcast.yaml" $LEADER_PARAMS | oc delete -n "$(project)" -f -
 }
 
 installLeaderboardBroadcast::description(){

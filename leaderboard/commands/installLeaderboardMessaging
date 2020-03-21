@@ -12,7 +12,10 @@ installLeaderboardMessaging::usage(){
 }
 
 installLeaderboardMessaging::clean(){
-  echo "WIP"
+  header_text "\n\n######## leaderboard::deploy:: Delete Leaderboard Messaging ########\n"  
+  LEADER_PARAMS="IMAGE_REPOSITORY=2020-leaderboard-messaging \
+   -p REPLICAS=$LEADERBOARD_MESSAGING_REPLICAS"
+  oc process -f "$(configdir)/leaderboard-messaging.yaml" $LEADER_PARAMS | oc delete -n "$(project)" -f -
 }
 
 installLeaderboardMessaging::description(){

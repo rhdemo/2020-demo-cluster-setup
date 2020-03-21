@@ -19,13 +19,13 @@ parameters:
     value: quay.io/redhatdemo/2020-leaderboard-api:latest
     required: true
   - name: CONTAINER_REQUEST_CPU
-    value: 500m
+    value: 150m
   - name: CONTAINER_REQUEST_MEMORY
-    value: 300Mi
+    value: 100Mi
   - name: CONTAINER_LIMIT_CPU
-    value: 1000m
+    value: 300m
   - name: CONTAINER_LIMIT_MEMORY
-    value: 1200Mi
+    value: 200Mi
 
 objects:
   - apiVersion: v1
@@ -57,6 +57,14 @@ objects:
                 - containerPort: 8080
                   name: http
                   protocol: TCP
+              livenessProbe:
+                httpGet:
+                  path: /health/live
+                  port: 8080
+              readinessProbe:
+                httpGet:
+                  path: /health/ready
+                  port: 8080
               resources:
                 requests:
                   cpu: ${CONTAINER_REQUEST_CPU}

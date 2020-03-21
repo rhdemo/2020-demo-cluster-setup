@@ -24,7 +24,7 @@ deployLeaderboardMessaging::run() {
       header_text "\n Waiting for pipeline $prRunName to complete \n"
       sleep 10
    done
-   header_text "\n Leaderboard Broadcast Pipeline completed \n"
+   header_text "\n Leaderboard Messaging Pipeline completed \n"
 }
 
 deployLeaderboardMessaging::usage(){

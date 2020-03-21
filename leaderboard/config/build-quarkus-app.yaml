@@ -26,7 +26,7 @@ spec:
         default: "$(outputs.resources.builtImage.url)"
       - name: dockerFile
         description: Parameter Description
-        default: Dockerfile.jvm
+        default: Dockerfile.native
   outputs:
     resources:
       - name: builtImage
@@ -34,11 +34,14 @@ spec:
   stepTemplate:
     resources:
       limits:
-        cpu: 3
+        cpu: 4
+        memory: 6Gi
+      requests:
+        cpu: 4
         memory: 4Gi
   steps:
     - name: build-sources
-      image: quay.io/quarkus/centos-quarkus-maven:19.3.1-java8
+      image: quay.io/quarkus/centos-quarkus-maven:20.0.0-java8
       workingDir: "/workspace/source"
       command:
         - /usr/local/bin/entrypoint-run.sh
