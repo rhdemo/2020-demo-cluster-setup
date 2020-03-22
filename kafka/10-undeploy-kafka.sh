@@ -4,8 +4,8 @@ NAMESPACE=${KAFKA_NAMESPACE:-kafka-demo}
 CLUSTER=${KAFKA_CLUSTER:-demo2020}
 
 # delete Kafka topics
-echo "Deleting KafkaTopic..."
-oc delete kafkatopic my-topic -n $NAMESPACE
+echo "Deleting KafkaTopics..."
+oc delete kafkatopic --all -n $NAMESPACE
 echo "...deleted"
 # delete Kafka Mirror Maker 2
 echo "Deleting Kafka Mirror Maker 2..."
