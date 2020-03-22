@@ -37,9 +37,6 @@ leaderboard_nexus:	leaderboard_project
 leaderboard_pipelines:	leaderboard_project
 	./leaderboard/installer installPipelines
 
-leaderboard_topics:
-	./leaderboard/installer createTopics
-
 leaderboard_install_api:	leaderboard_project
 	./leaderboard/installer installLeaderboardAPI
 
