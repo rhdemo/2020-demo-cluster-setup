@@ -5,7 +5,7 @@ metadata:
 spec:
   kafka:
     version: 2.4.0
-    replicas: 1
+    replicas: 3
     listeners:
       plain: {}
       tls: {}
@@ -33,10 +33,10 @@ spec:
     resources:
       requests:
         cpu: "2"
-        memory: 2Gi
+        memory: 4Gi
       limits:
         cpu: "2"
-        memory: 2Gi
+        memory: 4Gi
     metrics:
       # Inspired by config from Kafka 2.0.0 example rules:
       # https://github.com/prometheus/jmx_exporter/blob/master/example_configs/kafka-2_0_0.yml
@@ -135,7 +135,7 @@ spec:
           labels:
             quantile: "0.$4"
   zookeeper:
-    replicas: 1
+    replicas: 3
     readinessProbe:
       initialDelaySeconds: 15
       timeoutSeconds: 5
