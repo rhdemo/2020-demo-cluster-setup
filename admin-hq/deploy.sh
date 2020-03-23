@@ -19,10 +19,11 @@ echo "Deploying the Skupper Network"
 ## This places the skupper executable in the current directory.  Move the executable to a location that is in the execution path.
 ##
 
-skupper init --enable-router-console --router-console-auth openshift --id ${CLUSTER_NAME}
+SKUPPER_NAME="$(echo ${CLUSTER_NAME} | sed 's/ /_/g')"
+skupper init --enable-router-console --router-console-auth openshift --id ${SKUPPER_NAME}
 
 echo "Deploying Admin HQ Applications"
 
-oc process -f "${DIR}/admin-config.yml" -p CLUSTER_NAME=${CLUSTER_NAME} | oc create -f -
+oc process -f "${DIR}/admin-config.yml" -p CLUSTER_NAME="${CLUSTER_NAME}" | oc create -f -
 oc process -f "${DIR}/admin-server.yml" | oc create -f -
 oc process -f "${DIR}/admin-ui.yml"  | oc create -f -

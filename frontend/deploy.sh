@@ -11,7 +11,7 @@ ROLLOUT_STRATEGY=${ROLLOUT_STRATEGY:-Rolling}
 
 oc project ${PROJECT} 2> /dev/null || oc new-project ${PROJECT}
 
-oc process -f "${DIR}/common.yml" -p CLUSTER_NAME=${CLUSTER_NAME} | oc create -f -
+oc process -f "${DIR}/common.yml" -p CLUSTER_NAME="${CLUSTER_NAME}" | oc create -f -
 
 echo "Deploying the Skupper Network"
 ##
@@ -20,10 +20,11 @@ echo "Deploying the Skupper Network"
 ##
 ## This places the skupper executable in the current directory.  Move the executable to a location that is in the execution path.
 ##
-skupper init --id ${CLUSTER_NAME}
+SKUPPER_NAME="$(echo ${CLUSTER_NAME} | sed 's/ /_/g')"
+skupper init --id "${SKUPPER_NAME}"
 
 oc process -f "${DIR}/admin-edge.yml" | oc create -f -
-oc process -f "${DIR}/phone-server.yml" -p ROLLOUT_STRATEGY=${ROLLOUT_STRATEGY} | oc create -f -
-oc process -f "${DIR}/phone-ui.yml"  -p ROLLOUT_STRATEGY=${ROLLOUT_STRATEGY} | oc create -f -
+oc process -f "${DIR}/phone-server.yml" -p ROLLOUT_STRATEGY="${ROLLOUT_STRATEGY}" | oc create -f -
+oc process -f "${DIR}/phone-ui.yml"  -p ROLLOUT_STRATEGY="${ROLLOUT_STRATEGY}" | oc create -f -
 
 skupper connect "${DIR}/../.secrets/hq.yml"
