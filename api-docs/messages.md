@@ -4,7 +4,6 @@
 mc/game
 ```json
 {
-  "body": {
     "type": "reset-game",
     "game": {
       "id": "da7d1fd0-22a8-4ce4-b33c-3bfd98c18190",
@@ -13,14 +12,12 @@ mc/game
       "configuration": {}
     }
   }
-}
 ```
 
 ### Update Game AMQP Message
 mc/game
 ```json
 {
-  "body": {
     "type": "game",
     "game": {
       "id": "da7d1fd0-22a8-4ce4-b33c-3bfd98c18190",
@@ -29,5 +26,4 @@ mc/game
       "configuration": {}
     }
   }
-}
 ```
