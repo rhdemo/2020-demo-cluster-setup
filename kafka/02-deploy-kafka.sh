@@ -4,10 +4,16 @@ NAMESPACE=${KAFKA_NAMESPACE:-kafka-demo}
 CLUSTER=${KAFKA_CLUSTER:-demo2020}
 VERSION=${KAFKA_VERSION:-2.4.0}
 EXPOSE=${KAFKA_EXPOSE:-false}
+EXPORTER=${KAFKA_EXPORTER:-true}
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
 sed "s/my-cluster/$CLUSTER/" $DIR/cluster/kafka-persistent-with-metrics.yaml > $DIR/cluster/$CLUSTER-kafka-persistent-with-metrics.yaml
 sed -i "s/my-kafka-version/$VERSION/" $DIR/cluster/$CLUSTER-kafka-persistent-with-metrics.yaml
+
+# if Kafka Exporter is enabled, the corresponding YAML is added to the Kafka resource
+if [ "$EXPORTER" == "true" ]; then
+    yq m -i $DIR/cluster/$CLUSTER-kafka-persistent-with-metrics.yaml $DIR/cluster/kafka-exporter.yaml
+fi
 
 # if Kafka has to be exposed, an external listener is added
 if [ "$EXPOSE" == "true" ]; then
