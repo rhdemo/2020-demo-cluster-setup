@@ -8,7 +8,7 @@ spec:
     - name: "applicationSrcDir"
   check:
     # TODO update to UBI
-    image: alpine
+    image: registry.access.redhat.com/ubi8/ubi-minimal:8.1
     script: '[[ "$(params.applicationSrcDir)" = "leaderboard-aggregator" ]] && echo "Rollout latest Leaderboard Aggregator"'
 ---
 apiVersion: tekton.dev/v1alpha1
@@ -20,7 +20,7 @@ spec:
     - name: "applicationSrcDir"
   check:
     # TODO update to UBI
-    image: alpine
+    image: registry.access.redhat.com/ubi8/ubi-minimal:8.1
     script: '[[ "$(params.applicationSrcDir)" = "leaderboard-api" ]] && echo "Rollout latest Leaderboard API"'
 ---
 apiVersion: tekton.dev/v1alpha1
@@ -32,7 +32,7 @@ spec:
     - name: "applicationSrcDir"
   check:
     # TODO update to UBI
-    image: alpine
+    image: registry.access.redhat.com/ubi8/ubi-minimal:8.1
     script: '[[ "$(params.applicationSrcDir)" = "leaderboard-broadcast" ]] && echo "Rollout latest Leaderboard Broadcast"'
 ---
 apiVersion: tekton.dev/v1alpha1
@@ -44,5 +44,5 @@ spec:
     - name: "applicationSrcDir"
   check:
     # TODO update to UBI
-    image: alpine
+    image: registry.access.redhat.com/ubi8/ubi-minimal:8.1
     script: '[[ "$(params.applicationSrcDir)" = "leaderboard-messaging" ]] && echo "Rollout latest Leaderboard Messaging"'
