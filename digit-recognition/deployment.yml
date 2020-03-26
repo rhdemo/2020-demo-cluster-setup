@@ -46,7 +46,14 @@ objects:
             value: "${TF_CPP_MIN_VLOG_LEVEL}"
           - name: FILE_SYSTEM_POLL
             value: "${FILE_SYSTEM_POLL}"
-          ports:
+          resources:
+            limits:
+              cpu: 6
+              memory: 6Gi
+            requests:
+              cpu: 6
+              memory: 6Gi
+          ports:   
           - containerPort: ${{PORT}}
             protocol: TCP
           - containerPort: ${{REST_PORT}}
@@ -124,10 +131,10 @@ parameters:
   value: '8501'
   required: true
 - name: TF_CPP_MIN_VLOG_LEVEL
-  description: debug level
-  value: '2'
+  description: debug level.values are from 0-10.
+  value: '0'
   required: true
 - name: FILE_SYSTEM_POLL
   description: polling model changes
-  value: '30'
+  value: '1200'
   required: true
