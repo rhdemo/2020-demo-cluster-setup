@@ -27,7 +27,7 @@ parameters:
     value: "9092"
     required: true
   - name: KAFKA_TRANSACTION_TOPIC
-    value: "my-topic"
+    value: "transactions"
     required: true
   - name: REPLICAS
     value: "5"
