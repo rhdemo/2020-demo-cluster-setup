@@ -22,7 +22,7 @@ admin: oc_login
 admin-undeploy: oc_login
 	./admin-hq/undeploy.sh
 
-leaderboard_login: 
+leaderboard_login:
 	./leaderboard/installer ocLogin
 
 leaderboard_project:	leaderboard_login
@@ -79,7 +79,7 @@ leaderboard_install_all:	leaderboard_project
 	leaderboard_install_messaging
 	leaderboard_install_broadcast
 
-leaderboard_deploy_all:	
+leaderboard_deploy_all:
 	leaderboard_deploy_api
 	leaderboard_deploy_aggregator
 	leaderboard_deploy_messaging
@@ -97,24 +97,23 @@ visualization: oc_login
 scoring: oc_login
 	./scoring/deploy.sh
 
-scoring-undeploy: oc_login
-	./scoring/undeploy.sh
+quarkus_scoring: oc_login
+	./quarkus-scoring/deploy.sh
 
 frontend: oc_login
 	./frontend/deploy.sh
 
-frontend-undeploy: oc_login
-	./frontend/undeploy.sh
+leaderboard: oc_login
+	./leaderboard/deploy.sh
+
+visualization: oc_login
+	./visualization/deploy.sh
+
+admin: oc_login
+	./admin-hq/deploy.sh
 
 ml: oc_login
 	./digit-recognition/deploy.sh
 
 ml-clean: oc_login
 	./digit-recognition/cleanup.sh
-
-disconnect: oc_login
-	./frontend/disconnect.sh
-
-reconnect: oc_login
-	./frontend/reconnect.sh
-
