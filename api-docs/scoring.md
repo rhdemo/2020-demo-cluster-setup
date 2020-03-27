@@ -190,7 +190,7 @@ Scoring Server -> Kafka mirrored to HQ
 {
   "player": {
     "gameId": "new-game-1583157438",
-    "id": "Emerald Wanderer",
+    "id": "London - Emerald Wanderer",
     "username": "Emerald Wanderer",
     "score": 95,
     "right": 3,
@@ -203,9 +203,9 @@ Scoring Server -> Kafka mirrored to HQ
       "nose": 1,
       "color": 3
     },
-    "creationServer": "SFO",
-    "gameServer": "NY",
-    "scoringServer": "NY"
+    "creationServer": "London",
+    "gameServer": "Frankfurt",
+    "scoringServer": "Frankfurt"
   }
 }
 ```
