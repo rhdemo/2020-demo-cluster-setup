@@ -2,7 +2,7 @@
 
 createTopics::run() {
   header_text "\n\n######## leaderboard::deploy:: Create Leaderboard Topics ########\n"
-  oc create -n "$(kafkanamespace)" -f "$(configdir)/topics.yaml"
+  oc create -n "$(kafkanamespace)" -f "$(configdir)/topics.yaml" || true
 }
 
 createTopics::usage(){
@@ -10,7 +10,8 @@ createTopics::usage(){
 }
 
 createTopics::clean(){
-  echo "Not implemented"
+  header_text "\n\n######## leaderboard::deploy:: Delete Leaderboard Topics ########\n"
+  oc delete -n "$(kafkanamespace)" -f "$(configdir)/topics.yaml" || true
 }
 
 createTopics::description(){

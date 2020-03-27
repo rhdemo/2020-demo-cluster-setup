@@ -1,13 +1,33 @@
 #!/usr/bin/env bash
 
 installPipelines::run() {
+ header_text "\n\n######## leaderboard::deploy:: OpenShift Pipelines ########\n"
  oc apply -f "$(configdir)/pipelines/subscription.yaml" 
  
- sleep 5; while echo && oc get pods -n openshift-pipelines\
-   | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
+ # wait for project creation
+ pStatus="NotReady"
+ while [ "$pStatus" != "Active" ]
+ do
+   pStatus=$(oc get project openshift-pipelines -o jsonpath="{.status.phase}" 2>/dev/null)
+   header_text "\n Waiting for Pipelines to be deployed ...\n"
+   sleep 5
+ done
+
+ header_text "\n OpenShift Pipelines are ready ...\n"
+
+ header_text "\n Waiting for Pipelines Pods to be ready...\n"
+
+ while (echo && oc get pods -n openshift-pipelines \
+   | grep -v -E "(Running|Completed|STATUS)"); 
+ do 
+   sleep 5; 
+ done
+
+ header_text "\n OpenShift Pipelines Pods are ready ...\n"
 
  header_text "\n\n######## leaderboard::deploy:: Create Secrets ########\n"
 
+ oc delete -f $(configdir)/leaderboard-deploy-secret.yaml || true
  envsubst < "$(configdir)/leaderboard-deploy-secret.yaml" \
     | oc create -n "$(project)" -f - 
 
@@ -19,15 +39,16 @@ installPipelines::run() {
  header_text "\n\n######## leaderboard::deploy:: Create Pipeline Resources ########\n"
  oc apply -n "$(project)" \
     -f "$(configdir)/leaderboard-pipeline-resources.yaml" \
+    -f "$(configdir)/pipeline-conditions.yaml" \
+    -f "$(configdir)/openshift-is-task.yaml" \
     -f "$(configdir)/build-quarkus-app.yaml" \
     -f "$(configdir)/leaderboard-deploy-pipeline.yaml"
 
  header_text "\n\n######## leaderboard::deploy:: Patch 'pipeline' SA ########\n"
 
   # Patch Pipeline SA 
- oc patch sa -n "$(project)" pipeline \
-    --type='json' -p='[{"op": "add", "path": "/secrets/-", "value": {"name": "leaderboard-git" } },
-    {"op": "add", "path": "/secrets/-", "value": {"name": "leaderboard-quay" } }]'
+  oc patch -n "$(project)" sa pipeline \
+    --patch "$(cat leaderboard/config/pipeline-secrets-patch.yaml)"
 }
 
 installPipelines::usage(){
@@ -35,7 +56,15 @@ installPipelines::usage(){
 }
 
 installPipelines::clean(){
-  echo "Not implemented"
+ header_text "\n\n######## leaderboard::deploy:: Delete Pipeline Resources ########\n"
+ oc delete -n "$(project)" \
+    -f "$(configdir)/leaderboard-pipeline-resources.yaml" \
+    -f "$(configdir)/pipeline-conditions.yaml" \
+    -f "$(configdir)/openshift-is-task.yaml" \
+    -f "$(configdir)/build-quarkus-app.yaml" \
+    -f "$(configdir)/leaderboard-deploy-pipeline.yaml"
+ oc delete -f $(configdir)/leaderboard-deploy-secret.yaml || true
+ # TODO clean up secrets, patches
 }
 
 installPipelines::description(){

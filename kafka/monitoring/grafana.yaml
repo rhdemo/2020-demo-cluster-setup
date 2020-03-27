@@ -1,7 +1,7 @@
 # This is not a recommended configuration, and further support should be available
 # from the Prometheus and Grafana communities.
 
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: grafana
@@ -9,6 +9,9 @@ metadata:
     app: strimzi
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      name: grafana
   template:
     metadata:
       labels:
@@ -44,9 +47,9 @@ spec:
           readOnly: true
           subPath: strimzi-zookeeper-dashboard.json
         - name: grafana-config
-          mountPath: /var/lib/grafana/dashboards/strimzi-kafka-connect-dashboard.json
+          mountPath: /var/lib/grafana/dashboards/strimzi-kafka-mirror-maker-2-dashboard.json
           readOnly: true
-          subPath: strimzi-kafka-connect-dashboard.json
+          subPath: strimzi-kafka-mirror-maker-2-dashboard.json
         - name: grafana-config
           mountPath: /var/lib/grafana/dashboards/strimzi-kafka-exporter-dashboard.json
           readOnly: true

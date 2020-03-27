@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+installLeaderboardBroadcast::run() {
+  header_text "\n\n######## leaderboard::deploy:: Install Leaderboard Broadcast ########\n"  
+  LEADER_PARAMS="IMAGE_REPOSITORY=2020-leaderboard-broadcast \
+   -p REPLICAS=$LEADERBOARD_BROADCAST_REPLICAS"
+  oc process -f "$(configdir)/leaderboard-broadcast.yaml" $LEADER_PARAMS | oc apply -n "$(project)" -f -
+}
+
+installLeaderboardBroadcast::usage(){
+  echo "No parameters"
+}
+
+installLeaderboardBroadcast::clean(){
+  header_text "\n\n######## leaderboard::deploy:: Delete Leaderboard Broadcast ########\n"  
+  LEADER_PARAMS="IMAGE_REPOSITORY=2020-leaderboard-broadcast \
+   -p REPLICAS=$LEADERBOARD_BROADCAST_REPLICAS"
+  oc process -f "$(configdir)/leaderboard-broadcast.yaml" $LEADER_PARAMS | oc delete -n "$(project)" -f -
+}
+
+installLeaderboardBroadcast::description(){
+  echo "Install Leaderboard Broadcast"
+}

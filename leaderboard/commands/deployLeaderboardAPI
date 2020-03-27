@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+deployLeaderboardAPI::run() { 
+  header_text "\n\n######## leaderboard::deploy:: Deploying Leaderboard API ########\n"
+  prRunName=$(tkn pipeline start  leaderboard-deploy \
+   --namespace "$(project)" \
+   --resource app-source=git-source \
+   --resource app-image=leaderboard-api-image \
+   --param applicationSrcDir=leaderboard-api \
+   --param mavenBuildCmd=mvn,-Papi,clean,install \
+   --param mavenMirrorUrl="$MAVEN_MIRROR_URL" \
+    | awk 'NR==1{print $3}')
+
+   prStatus="Running"
+   while [ "$prStatus" != "Succeeded" ]
+   do
+      prStatus=$(oc get -n $(project) pipelinerun $prRunName -o jsonpath="{.status.conditions[].reason}")
+      if [ "$prStatus" == "Failed" ];
+      then
+        echo "ERROR:(LB-API-DEPLOY) Pipeline $prRunName failed"
+        tkn pr logs -L
+        break;
+      fi
+      header_text "\n Waiting for pipeline $prRunName to complete \n"
+      sleep 10
+   done
+   header_text "\n Leaderboard API Pipeline completed \n"
+}
+
+deployLeaderboardAPI::usage(){
+  echo "No parameters"
+}
+
+deployLeaderboardAPI::clean(){
+  echo "WIP"
+}
+
+deployLeaderboardAPI::description(){
+  echo "Deploy Leaderboard Applications"
+}

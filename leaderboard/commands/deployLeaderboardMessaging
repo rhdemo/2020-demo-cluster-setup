@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+deployLeaderboardMessaging::run() { 
+  header_text "\n\n######## leaderboard::deploy:: Deploying Leaderboard Messaging ########\n"
+  prRunName=$(tkn pipeline start  leaderboard-deploy \
+   --namespace "$(project)" \
+   --resource app-source=git-source \
+   --resource app-image=leaderboard-messaging-image \
+   --param applicationSrcDir=leaderboard-messaging \
+   --param mavenBuildCmd=mvn,-Pmessaging,clean,install \
+   --param mavenMirrorUrl="$MAVEN_MIRROR_URL" \
+    | awk 'NR==1{print $3}')
+
+   prStatus="Running"
+   while [ "$prStatus" != "Succeeded" ]
+   do
+      prStatus=$(oc get -n $(project) pipelinerun $prRunName -o jsonpath="{.status.conditions[].reason}")
+      if [ "$prStatus" == "Failed" ];
+      then
+        echo "ERROR:(LB-MSG-DEPLOY) Pipeline $prRunName failed"
+        tkn pr logs -L
+        break;
+      fi
+      header_text "\n Waiting for pipeline $prRunName to complete \n"
+      sleep 10
+   done
+   header_text "\n Leaderboard Messaging Pipeline completed \n"
+}
+
+deployLeaderboardMessaging::usage(){
+  echo "No parameters"
+}
+
+deployLeaderboardMessaging::clean(){
+  echo "WIP"
+}
+
+deployLeaderboardMessaging::description(){
+  echo "Deploy Leaderboard Messaging application"
+}

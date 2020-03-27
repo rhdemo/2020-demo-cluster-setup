@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+createOrUseProject::run() {
+ # wait for project creation
+ local pStatus=$(oc get project $(project) -o jsonpath="{.status.phase}" 2>/dev/null)
+ 
+ if [ "$pStatus" != "Active" ]; then
+   oc new-project "$(project)" \
+     --description="Leaderboard Applications"
+ fi
+
+ pStatus=$(oc get project $(project) -o jsonpath="{.status.phase}" 2>/dev/null)
+ 
+ while [ "$pStatus" != "Active" ]
+ do   
+   header_text "\n Waiting for $(project) to be created  ...\n"
+   sleep 2
+ done
+ 
+ oc project "$(project)" 
+}
+
+createOrUseProject::usage(){
+  echo "No parameters"
+}
+
+createOrUseProject::clean(){
+  oc delete project "$(project)"
+}
+
+createOrUseProject::description(){
+  echo "Create or Use OpenShift project: $(project)"
+}

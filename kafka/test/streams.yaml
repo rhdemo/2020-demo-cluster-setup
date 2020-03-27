@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: application_id
+  name: application_id
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: application_id
+  template:
+    metadata:
+      labels:
+        app: application_id
+    spec:
+      containers:
+      - name: application_id
+        image: strimzi/hello-world-streams:latest
+        env:
+          - name: BOOTSTRAP_SERVERS
+            value: bootstrap_servers
+          - name: APPLICATION_ID
+            value: application_id
+          - name: SOURCE_TOPIC
+            value: source_topic
+          - name: TARGET_TOPIC
+            value: target_topic
+          - name: COMMIT_INTERVAL_MS
+            value: "5000"
+          - name: LOG_LEVEL
+            value: "INFO"

@@ -1,5 +1,6 @@
 .env
 .repo/
+.secrets/
 
 # certs
 *.pem

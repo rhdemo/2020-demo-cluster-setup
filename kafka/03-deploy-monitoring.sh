@@ -31,11 +31,11 @@ cp $DIR/monitoring/dashboards/strimzi-zookeeper.json $DIR/monitoring/dashboards/
 sed -i 's/${DS_PROMETHEUS}/Prometheus/' $DIR/monitoring/dashboards/strimzi-zookeeper-dashboard.json
 sed -i 's/DS_PROMETHEUS/Prometheus/' $DIR/monitoring/dashboards/strimzi-zookeeper-dashboard.json
 
-# build the Kafka Connect dashboard
-cp $DIR/monitoring/dashboards/strimzi-kafka-connect.json $DIR/monitoring/dashboards/strimzi-kafka-connect-dashboard.json
+# build the Kafka Mirror Maker 2 dashboard
+cp $DIR/monitoring/dashboards/strimzi-kafka-mirror-maker-2.json $DIR/monitoring/dashboards/strimzi-kafka-mirror-maker-2-dashboard.json
 
-sed -i 's/${DS_PROMETHEUS}/Prometheus/' $DIR/monitoring/dashboards/strimzi-kafka-connect-dashboard.json
-sed -i 's/DS_PROMETHEUS/Prometheus/' $DIR/monitoring/dashboards/strimzi-kafka-connect-dashboard.json
+sed -i 's/${DS_PROMETHEUS}/Prometheus/' $DIR/monitoring/dashboards/strimzi-kafka-mirror-maker-2-dashboard.json
+sed -i 's/DS_PROMETHEUS/Prometheus/' $DIR/monitoring/dashboards/strimzi-kafka-mirror-maker-2-dashboard.json
 
 # build the Kafka Exporter dashboard
 cp $DIR/monitoring/dashboards/strimzi-kafka-exporter.json $DIR/monitoring/dashboards/strimzi-kafka-exporter-dashboard.json
@@ -48,7 +48,7 @@ oc create configmap grafana-config \
     --from-file=grafana-dashboard-provider.yaml=$DIR/monitoring/grafana-dashboard-provider.yaml \
     --from-file=strimzi-kafka-dashboard.json=$DIR/monitoring/dashboards/strimzi-kafka-dashboard.json \
     --from-file=strimzi-zookeeper-dashboard.json=$DIR/monitoring/dashboards/strimzi-zookeeper-dashboard.json \
-    --from-file=strimzi-kafka-connect-dashboard.json=$DIR/monitoring/dashboards/strimzi-kafka-connect-dashboard.json \
+    --from-file=strimzi-kafka-mirror-maker-2-dashboard.json=$DIR/monitoring/dashboards/strimzi-kafka-mirror-maker-2-dashboard.json \
     --from-file=strimzi-kafka-exporter-dashboard.json=$DIR/monitoring/dashboards/strimzi-kafka-exporter-dashboard.json \
     -n $NAMESPACE
 
@@ -56,7 +56,7 @@ oc label configmap grafana-config app=strimzi
 
 rm $DIR/monitoring/dashboards/strimzi-kafka-dashboard.json
 rm $DIR/monitoring/dashboards/strimzi-zookeeper-dashboard.json
-rm $DIR/monitoring/dashboards/strimzi-kafka-connect-dashboard.json
+rm $DIR/monitoring/dashboards/strimzi-kafka-mirror-maker-2-dashboard.json
 rm $DIR/monitoring/dashboards/strimzi-kafka-exporter-dashboard.json
 
 # Grafana

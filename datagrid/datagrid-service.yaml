@@ -1,4 +1,4 @@
-apiVersion: v1
+apiVersion: template.openshift.io/v1
 kind: Template
 labels:
   template: datagrid-service
@@ -35,14 +35,14 @@ objects:
         targetPort: 11222
       selector:
         deploymentConfig: datagrid-service
-  - apiVersion: apps/v1beta1
+  - apiVersion: apps/v1
     kind: StatefulSet
     metadata:
       labels:
         application: datagrid-service
       name: datagrid-service
     spec:
-      replicas: 2
+      replicas: ${{NUMBER_OF_INSTANCES}}
       serviceName: datagrid-ping
       strategy:
         type: Rolling
@@ -52,6 +52,10 @@ objects:
           timeoutSeconds: 1200
           maxUnavailable: 1
           maxSurge: 1
+      selector:
+        matchLabels:
+          application: datagrid-service
+          deploymentConfig: datagrid-service
       template:
         metadata:
           labels:
@@ -65,7 +69,7 @@ objects:
               value: /config/server.yaml
             - name: MANAGED_ENV
               value: "TRUE"
-            image: quay.io/infinispan/server@sha256:3ca725718bfd046c4f12252d7ed6ec67622e2ab3fe15777f1297e3ee59363373
+            image: quay.io/infinispan/server@sha256:f44755470d4b26750fdf3c102ce2cc18533761c7bb6ae74d460e0f4c6a618a89
             name: datagrid-service
             ports:
             - containerPort: 7800
@@ -99,7 +103,18 @@ objects:
             volumeMounts:
             - mountPath: /config
               name: config-volume
+            - mountPath: /opt/infinispan/server/lib
+              name: jar-volume
           volumes:
             - name: config-volume
               configMap:
                 name: datagrid-configuration
+            - name: jar-volume
+              configMap:
+                name: datagrid-jars
+parameters:
+- description: Specifies how many instances of the application to create in the cluster.
+  displayName: Number of Instances
+  name: NUMBER_OF_INSTANCES
+  required: true
+  value: "2"

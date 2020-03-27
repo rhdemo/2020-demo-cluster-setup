@@ -6,11 +6,15 @@ spec:
   version: 2.4.0
   replicas: 1
   connectCluster: "hq"
-  config:
-    config.storage.replication.factor: 1
-    offset.storage.replication.factor: 1
-    status.storage.replication.factor: 1
   clusters:
   - alias: "hq"
     bootstrapServers: my-cluster-kafka-bootstrap:9092
+  metrics:
+    lowercaseOutputName: true
+    lowercaseOutputLabelNames: true
+    rules:
+    - pattern : "kafka.connect<type=connect-worker-metrics>([^:]+):"
+      name: "kafka_connect_connect_worker_metrics_$1"
+    - pattern : "kafka.connect<type=connect-metrics, client-id=([^:]+)><>([^:]+)"
+      name: "kafka_connect_connect_metrics_$1_$2"
   mirrors: {}

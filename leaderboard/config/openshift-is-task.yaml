@@ -1,0 +1,21 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: oc-import-image
+spec:
+  inputs:
+    resources:
+      - name: appImage
+        type: image
+    params:
+      - name: imageStreamName
+        description: The OpenShift Image Stream Name
+        type: string
+  steps:
+    - name: oc
+      image: quay.io/openshift/origin-cli:latest
+      script: "oc import-image $@"
+      args:
+        - "$(inputs.params.imageStreamName)"
+        - "--from=$(inputs.resources.appImage.url)"
+        - "--confirm"

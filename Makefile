@@ -16,6 +16,84 @@ kafka: oc_login
 kafka_mirror_maker: oc_login
 	./kafka/deploy-kafka-mirror-maker.sh
 
+admin: oc_login
+	./admin-hq/deploy.sh
+
+admin-undeploy: oc_login
+	./admin-hq/undeploy.sh
+
+leaderboard_login:
+	./leaderboard/installer ocLogin
+
+leaderboard_project:	leaderboard_login
+	./leaderboard/installer createOrUseProject
+
+leaderboard_postgresql:	leaderboard_project
+	./leaderboard/installer installPostgresql
+
+leaderboard_nexus:	leaderboard_project
+	./leaderboard/installer installNexus
+
+leaderboard_pipelines:	leaderboard_project
+	./leaderboard/installer installPipelines
+
+leaderboard_install_api:	leaderboard_project
+	./leaderboard/installer installLeaderboardAPI
+
+leaderboard_deploy_api:
+	./leaderboard/installer deployLeaderboardAPI
+
+leaderboard_uninstall_api:
+	./leaderboard/installer installLeaderboardAPI --clean
+
+leaderboard_install_aggregator:		leaderboard_project
+	./leaderboard/installer installLeaderboard
+
+leaderboard_uninstall_aggregator:
+	./leaderboard/installer installLeaderboard --clean
+
+leaderboard_deploy_aggregator:
+	./leaderboard/installer deployLeaderboard
+
+leaderboard_install_messaging:	leaderboard_project
+	./leaderboard/installer installLeaderboardMessaging
+
+leaderboard_deploy_messaging:
+	./leaderboard/installer deployLeaderboardMessaging
+
+leaderboard_uninstall_messaging:
+	./leaderboard/installer installLeaderboardMessaging --clean
+
+leaderboard_install_broadcast:		leaderboard_project
+	./leaderboard/installer installLeaderboardBroadcast
+
+leaderboard_deploy_broadcast:	leaderboard_install_broadcast
+	./leaderboard/installer deployLeaderboardBroadcast
+
+leaderboard_uninstall_broadcast:
+	./leaderboard/installer installLeaderboardBroadcast --clean
+
+leaderboard_install_all:	leaderboard_project
+	leaderboard_install_api
+	leaderboard_install_aggregator
+	leaderboard_install_messaging
+	leaderboard_install_broadcast
+
+leaderboard_deploy_all:
+	leaderboard_deploy_api
+	leaderboard_deploy_aggregator
+	leaderboard_deploy_messaging
+	leaderboard_deploy_broadcast
+
+leaderboard_uninstall_all:
+	leaderboard_install_api --clean
+	leaderboard_install_aggregator --clean
+	leaderboard_install_messaging --clean
+	leaderboard_install_broadcast --clean
+
+visualization: oc_login
+	./visualization/deploy.sh
+
 scoring: oc_login
 	./scoring/deploy.sh
 

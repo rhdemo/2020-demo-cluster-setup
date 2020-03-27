@@ -12,20 +12,27 @@ parameters:
     value: game
     required: true
   - name: REPLICAS
-    value: "1"
+    value: "5"
     required: true
   - name: IMAGE_REPOSITORY
     displayName: Image Repository
     value: quay.io/redhatdemo/2020-phone-ui:latest
     required: true
   - name: CONTAINER_REQUEST_CPU
-    value: 200m
+    value: 500m
   - name: CONTAINER_REQUEST_MEMORY
-    value: 300Mi
+    value: 500Mi
   - name: CONTAINER_LIMIT_CPU
-    value: 200m
+    value: 500m
   - name: CONTAINER_LIMIT_MEMORY
-    value: 300Mi
+    value: 1000Mi
+  - name: PUBLIC_URL
+    value: game.sysdeseng.com
+  - name: PUBLIC_NAME
+    value: game-sysdeseng
+  - name: ROLLOUT_STRATEGY
+    value: "Rolling"
+    required: true
 
 objects:
   - apiVersion: v1
@@ -40,9 +47,7 @@ objects:
       selector:
         app: ${APPLICATION_NAME}
       strategy:
-        rollingParams:
-          timeoutSeconds: 3600
-        type: Rolling
+        type: ${ROLLOUT_STRATEGY}
       template:
         metadata:
           labels:
@@ -87,6 +92,20 @@ objects:
         app: ${APPLICATION_NAME}
       name: ${ROUTE_NAME}
     spec:
+      port:
+        targetPort: 8080
+      to:
+        kind: Service
+        name: ${APPLICATION_NAME}
+
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      labels:
+        app: ${APPLICATION_NAME} 
+      name: ${PUBLIC_NAME}
+    spec:
+      host: ${PUBLIC_URL} 
       port:
         targetPort: 8080
       to:
