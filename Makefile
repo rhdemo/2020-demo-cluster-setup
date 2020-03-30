@@ -106,12 +106,6 @@ frontend: oc_login
 leaderboard: oc_login
 	./leaderboard/deploy.sh
 
-visualization: oc_login
-	./visualization/deploy.sh
-
-admin: oc_login
-	./admin-hq/deploy.sh
-
 ml: oc_login
 	./digit-recognition/deploy.sh
 
