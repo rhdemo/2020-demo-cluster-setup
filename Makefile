@@ -103,6 +103,9 @@ quarkus_scoring: oc_login
 frontend: oc_login
 	./frontend/deploy.sh
 
+frontend-undeploy: oc_login
+	./frontend/undeploy.sh
+
 leaderboard: oc_login
 	./leaderboard/deploy.sh
 
@@ -111,3 +114,10 @@ ml: oc_login
 
 ml-clean: oc_login
 	./digit-recognition/cleanup.sh
+
+disconnect:
+	./frontend/disconnect.sh
+
+reconnect:
+	./frontend/reconnect.sh
+
