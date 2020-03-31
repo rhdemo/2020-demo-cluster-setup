@@ -12,7 +12,7 @@ parameters:
     value: dashboard
     required: true
   - name: REPLICAS
-    value: "1"
+    value: "2"
     required: true
   - name: IMAGE_REPOSITORY
     displayName: Image Repository

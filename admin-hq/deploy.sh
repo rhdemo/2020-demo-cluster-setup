@@ -27,3 +27,4 @@ echo "Deploying Admin HQ Applications"
 oc process -f "${DIR}/admin-config.yml" -p CLUSTER_NAME="${CLUSTER_NAME}" | oc create -f -
 oc process -f "${DIR}/admin-server.yml" | oc create -f -
 oc process -f "${DIR}/admin-ui.yml"  | oc create -f -
+oc process -f "${DIR}/dashboard-ui.yml" | oc create -f -
