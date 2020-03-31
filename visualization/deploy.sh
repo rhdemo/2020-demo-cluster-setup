@@ -6,8 +6,5 @@ PROJECT=${PROJECT:-leaderboard}
 QUAY_ORG=${QUAY_ORG:-redhatdemo}
 
 oc project ${PROJECT} 2> /dev/null || oc new-project ${PROJECT}
-
-#DASHBOARD_UI_PARAMS=""
-#oc process -f "${DIR}/dashboard-ui.yml" ${DASHBOARD_UI_PARAMS} | oc create -f -
 LEADERBOARD_UI_PARAMS=""
 oc process -f "${DIR}/leaderboard-ui.yml" ${LEADERBOARD_UI_PARAMS} | oc create -f -
