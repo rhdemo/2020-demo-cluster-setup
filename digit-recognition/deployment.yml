@@ -48,11 +48,11 @@ objects:
             value: "${FILE_SYSTEM_POLL}"
           resources:
             limits:
-              cpu: 6
-              memory: 6Gi
+              cpu: 1
+              memory: 1Gi
             requests:
-              cpu: 6
-              memory: 6Gi
+              cpu: 1
+              memory: 1Gi
           ports:   
           - containerPort: ${{PORT}}
             protocol: TCP
@@ -108,7 +108,7 @@ parameters:
   from: "[a-zA-Z0-9]{10}"
   required: true
 - name: REPLICAS
-  value: "1"
+  value: "20"
   required: true
 - name: IMAGE_REPOSITORY
   description: Name of the Image containing the model
