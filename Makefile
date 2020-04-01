@@ -94,8 +94,9 @@ leaderboard_uninstall_all:
 visualization: oc_login
 	./visualization/deploy.sh
 
-scoring: oc_login
-	./scoring/deploy.sh
+# old version
+#scoring: oc_login
+#	./scoring/deploy.sh
 
 quarkus_scoring: oc_login
 	./quarkus-scoring/deploy.sh
@@ -105,6 +106,9 @@ frontend: oc_login
 
 frontend-undeploy: oc_login
 	./frontend/undeploy.sh
+
+frontend-download-logs: oc_login
+	./frontend/download-logs.sh
 
 leaderboard: oc_login
 	./leaderboard/deploy.sh
