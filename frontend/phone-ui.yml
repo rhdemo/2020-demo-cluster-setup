@@ -26,10 +26,6 @@ parameters:
     value: 500m
   - name: CONTAINER_LIMIT_MEMORY
     value: 1000Mi
-  - name: PUBLIC_URL
-    value: game.sysdeseng.com
-  - name: PUBLIC_NAME
-    value: game-sysdeseng
   - name: ROLLOUT_STRATEGY
     value: "Rolling"
     required: true
@@ -85,29 +81,3 @@ objects:
       selector:
         app: ${APPLICATION_NAME}
 
-  - apiVersion: v1
-    kind: Route
-    metadata:
-      labels:
-        app: ${APPLICATION_NAME}
-      name: ${ROUTE_NAME}
-    spec:
-      port:
-        targetPort: 8080
-      to:
-        kind: Service
-        name: ${APPLICATION_NAME}
-
-  - apiVersion: v1
-    kind: Route
-    metadata:
-      labels:
-        app: ${APPLICATION_NAME} 
-      name: ${PUBLIC_NAME}
-    spec:
-      host: ${PUBLIC_URL} 
-      port:
-        targetPort: 8080
-      to:
-        kind: Service
-        name: ${APPLICATION_NAME}
