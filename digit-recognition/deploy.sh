@@ -12,8 +12,8 @@ oc project ${PROJECT} 2> /dev/null || oc new-project ${PROJECT}
 
 echo "Deploying digit_recognition Application"
 ML_PARAMS="IMAGE_REPOSITORY=quay.io/${QUAY_ORG}/2020-digit-recognition:latest \
-    -p REPLICAS=1 \
-    -p TF_CPP_MIN_VLOG_LEVEL=2 \
+    -p REPLICAS=20 \
+    -p TF_CPP_MIN_VLOG_LEVEL=0 \
     -p APPLICATION_NAME=tf-cnn"
 oc process -f "${DIR}/deployment.yml" ${ML_PARAMS} \
   | oc create -f -
