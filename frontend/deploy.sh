@@ -26,5 +26,6 @@ skupper init --id "${SKUPPER_NAME}"
 oc process -f "${DIR}/admin-edge.yml" | oc create -f -
 oc process -f "${DIR}/phone-server.yml" -p ROLLOUT_STRATEGY="${ROLLOUT_STRATEGY}" | oc create -f -
 oc process -f "${DIR}/phone-ui.yml"  -p ROLLOUT_STRATEGY="${ROLLOUT_STRATEGY}" | oc create -f -
+oc process -f "${DIR}/phone-route.yml"  | oc create -f -
 
 skupper connect "${DIR}/../.secrets/hq.yml"
