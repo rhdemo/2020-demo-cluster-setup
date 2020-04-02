@@ -1,5 +1,0 @@
-data:
-  default-pod-template: |
-    securityContext:
-      runAsUser: 1001
-      fsGroup: 1001

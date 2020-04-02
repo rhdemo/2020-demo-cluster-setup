@@ -1,0 +1,340 @@
+{
+  "kind": "Template",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "openshift-pgsql12-primary",
+    "annotations": {
+      "iconClass": "icon-postgresql",
+      "description": "Template for PostgreSQL 12 running a primary node",
+      "tags": "database,postgresql"
+    }
+  },
+  "message": "The following service(s) have been created in your project: openshift-pgsql12-primary.\n\n  Username: ${PG_USER_NAME}\n  Password: ${PG_USER_PASSWORD}\n  Database Name: ${PG_DATABASE}\n \n  Network mask: ${PG_NETWORK_MASK}\n  Slot name 1: ${PG_REPLICA1}\n  Connection URL: postgresql://openshift-pgsql12:5432/\n\nFor more information about using this template, including OpenShift considerations,\nsee https://github.com/jesperpedersen/openshift-pgsql/",
+  "labels": {
+    "application": "openshift-pgsql12-primary",
+    "createdBy": "template-openshift-pgsql12-primary"
+  },
+  "parameters": [
+    {
+      "description": "The namespace to store the imagestream",
+      "name": "PG_NAMESPACE",
+      "value": "leaderboard"
+    },
+    {
+      "description": "The linux container image name",
+      "name": "PG_IMAGE",
+      "value": "quay.io/redhatdemo/openshift-pgsql12-primary:centos7"
+    },
+    {
+      "description": "The name of the database",
+      "name": "PG_DATABASE",
+      "value": "gamedb"
+    },
+    {
+      "description": "The user name",
+      "name": "PG_USER_NAME",
+      "from": "user[a-zA-Z0-9]{3}",
+      "generate": "expression"
+    },
+    {
+      "description": "The password for the user",
+      "name": "PG_USER_PASSWORD",
+      "from": "[a-zA-Z0-9]{8}",
+      "generate": "expression"
+    },
+    {
+      "description": "The network mask for database access",
+      "name": "PG_NETWORK_MASK"
+    },
+    {
+      "description": "The encoding of the database",
+      "name": "PG_DATABASE_ENCODING",
+      "value": "UTF8"
+    },
+    {
+      "description": "max_connections setting",
+      "name": "PG_MAX_CONNECTIONS",
+      "value": "100"
+    },
+    {
+      "description": "shared_buffers setting (MB)",
+      "name": "PG_SHARED_BUFFERS",
+      "value": "256"
+    },
+    {
+      "description": "work_mem setting (MB)",
+      "name": "PG_WORK_MEM",
+      "value": "1536"
+    },
+    {
+      "description": "effective_cache_size setting (GB)",
+      "name": "PG_EFFECTIVE_CACHE_SIZE",
+      "value": "1"
+    },
+    {
+      "description": "`effective_io_concurrency` setting ",
+      "name": "PG_EFFECTIVE_IO",
+      "value": "128"
+    },
+    {
+      "description": "max_wal_size setting (GB)",
+      "name": "PG_MAX_WAL_SIZE",
+      "value": "1"
+    },
+    {
+      "description": "password_encryption setting",
+      "name": "PG_PASSWORD_ENCRYPTION",
+      "value": "md5"
+    },
+    {
+      "description": "Size of /pgdata partition (GB)",
+      "name": "PG_PGDATA",
+      "value": "10"
+    },
+    {
+      "description": "Size of /pgwal partition (GB)",
+      "name": "PG_PGWAL",
+      "value": "2"
+    }
+  ],
+  "objects": [
+    {
+      "kind": "Secret",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "openshift-pgsql12-primary-secret"
+      },
+      "stringData": {
+        "database-db": "${PG_DATABASE}",
+        "database-username": "${PG_USER_NAME}",
+        "database-username-password": "${PG_USER_PASSWORD}"
+      }
+    },
+    {
+      "kind": "PersistentVolumeClaim",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "openshift-pgsql12-primary-pgdata"
+      },
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "resources": {
+          "requests": {
+            "storage": "${PG_PGDATA}Gi"
+          }
+        }
+      }
+    },
+    {
+      "kind": "PersistentVolumeClaim",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "openshift-pgsql12-primary-pgwal"
+      },
+      "spec": {
+        "accessModes": [
+          "ReadWriteOnce"
+        ],
+        "resources": {
+          "requests": {
+            "storage": "${PG_PGWAL}Gi"
+          }
+        }
+      }
+    },
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "openshift-pgsql12-primary"
+      },
+      "spec": {
+        "strategy": {
+          "type": "Recreate"
+        },
+        "triggers": [
+          {
+            "type": "ImageChange",
+            "imageChangeParams": {
+              "automatic": true,
+              "containerNames": [
+                "postgresql"
+              ],
+              "from": {
+                "kind": "ImageStreamTag",
+                "namespace": "${PG_NAMESPACE}",
+                "name": "openshift-pgsql12-primary:latest"
+              }
+            }
+          },
+          {
+            "type": "ConfigChange"
+          }
+        ],
+        "replicas": 1,
+        "selector": {
+          "deploymentConfig": "openshift-pgsql12-primary"
+        },
+        "template": {
+          "metadata": {
+            "name": "openshift-pgsql12-primary",
+            "labels": {
+              "deploymentConfig": "openshift-pgsql12-primary"
+            }
+          },
+          "spec": {
+            "volumes": [
+              {
+                "name": "openshift-pgsql12-primary-pgdata",
+                "persistentVolumeClaim": {
+                  "claimName": "openshift-pgsql12-primary-pgdata"
+                }
+              },
+              {
+                "name": "openshift-pgsql12-primary-pgwal",
+                "persistentVolumeClaim": {
+                  "claimName": "openshift-pgsql12-primary-pgwal"
+                }
+              }
+            ],
+            "containers": [
+              {
+                "name": "postgresql",
+                "image": "${PG_IMAGE}",
+                "ports": [
+                  {
+                    "containerPort": 5432,
+                    "protocol": "TCP"
+                  }
+                ],
+                "readinessProbe": {
+                  "timeoutSeconds": 1,
+                  "initialDelaySeconds": 5,
+                  "exec": {
+                    "command": [
+                      "/usr/libexec/check-container"
+                    ]
+                  }
+                },
+                "livenessProbe": {
+                  "timeoutSeconds": 10,
+                  "initialDelaySeconds": 120,
+                  "exec": {
+                    "command": [
+                      "/usr/libexec/check-container",
+                      "--live"
+                    ]
+                  }
+                },
+                "env": [
+                  {
+                    "name": "PG_DATABASE",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "openshift-pgsql12-primary-secret",
+                        "key": "database-db"
+                      }
+                    }
+                  },
+                  {
+                    "name": "PG_USER_NAME",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "openshift-pgsql12-primary-secret",
+                        "key": "database-username"
+                      }
+                    }
+                  },
+                  {
+                    "name": "PG_USER_PASSWORD",
+                    "valueFrom": {
+                      "secretKeyRef": {
+                        "name": "openshift-pgsql12-primary-secret",
+                        "key": "database-username-password"
+                      }
+                    }
+                  },
+                  {
+                    "name": "PG_NETWORK_MASK",
+                    "value": "${PG_NETWORK_MASK}"
+                  },
+                  {
+                    "name": "PG_DATABASE_ENCODING",
+                    "value": "${PG_DATABASE_ENCODING}"
+                  },
+                  {
+                    "name": "PG_MAX_CONNECTIONS",
+                    "value": "${PG_MAX_CONNECTIONS}"
+                  },
+                  {
+                    "name": "PG_SHARED_BUFFERS",
+                    "value": "${PG_SHARED_BUFFERS}"
+                  },
+                  {
+                    "name": "PG_WORK_MEM",
+                    "value": "${PG_WORK_MEM}"
+                  },
+                  {
+                    "name": "PG_EFFECTIVE_CACHE_SIZE",
+                    "value": "${PG_EFFECTIVE_CACHE_SIZE}"
+                  },
+                  {
+                    "name": "PG_MAX_WAL_SIZE",
+                    "value": "${PG_MAX_WAL_SIZE}"
+                  },
+                  {
+                    "name": "PG_PASSWORD_ENCRYPTION",
+                    "value": "${PG_PASSWORD_ENCRYPTION}"
+                  },
+                  {
+                    "name": "PG_EFFECTIVE_IO",
+                    "value": "${PG_EFFECTIVE_IO}"
+                  }
+                ],
+                "resources": {},
+                "volumeMounts": [
+                  {
+                    "name": "openshift-pgsql12-primary-pgdata",
+                    "mountPath": "/pgdata"
+                  },
+                  {
+                    "name": "openshift-pgsql12-primary-pgwal",
+                    "mountPath": "/pgwal"
+                  }
+                ],
+                "terminationMessagePath": "/dev/termination-log",
+                "imagePullPolicy": "IfNotPresent",
+                "securityContext": {
+                  "capabilities": {},
+                  "privileged": false
+                }
+              }
+            ],
+            "restartPolicy": "Always",
+            "dnsPolicy": "ClusterFirst"
+          }
+        }
+      }
+    },
+    {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "postgresql"
+      },
+      "spec": {
+        "ports": [
+          {
+            "port": 5432,
+            "targetPort": 5432
+          }
+        ],
+        "selector": {
+          "deploymentConfig": "openshift-pgsql12-primary"
+        }
+      }
+    }
+  ]
+}
