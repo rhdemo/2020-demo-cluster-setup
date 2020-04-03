@@ -87,17 +87,15 @@ objects:
                 - mountPath: /etc/messaging/
                   name: skupper
               readinessProbe:
-                httpGet:
-                  path: /status
-                  port: 8080
-                  scheme: HTTP
+                tcpSocket:
+                  port: ${{PORT}}
+                initialDelaySeconds: 15
+                timeoutSeconds: 5
               livenessProbe:
-                httpGet:
-                  path: /status
-                  port: 8080
-                  scheme: HTTP
-                initialDelaySeconds: 60
-                periodSeconds: 30
+                tcpSocket:
+                  port: ${{PORT}}
+                initialDelaySeconds: 15
+                timeoutSeconds: 5
           dnsPolicy: ClusterFirst
           restartPolicy: Always
           schedulerName: default-scheduler
