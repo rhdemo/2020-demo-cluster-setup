@@ -34,7 +34,7 @@ leaderboard_login:
 leaderboard_project:	leaderboard_login
 	./leaderboard/installer createOrUseProject
 
-leaderboard_postgresql:	leaderboard_project
+leaderboard_install_postgresql:	leaderboard_project
 	./leaderboard/installer installPostgresql
 
 leaderboard_uninstall_postgresql:	leaderboard_project
