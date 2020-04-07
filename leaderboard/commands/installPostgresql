@@ -10,6 +10,11 @@ installPostgresql::run() {
  
  sleep 5; while echo && oc get pods -n "$(project)" --selector=deploymentconfig=postgresql \
    | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
+
+ oc create configmap -n"$(project)" leaderboard-schema \
+   --from-file=schema.sql="$(configdir)/schema.sql"
+   
+ oc create -n"$(project)" -f "$(configdir)/leaderboard-schema-job.yaml"
 }
 
 installPostgresql::usage(){
@@ -19,7 +24,9 @@ installPostgresql::usage(){
 installPostgresql::clean(){
   header_text "UnDeploying PostgeSQL"
  POSTGRESQL_PARAMS="PG_NETWORK_MASK=all"
- oc process "$(configdir)/openshift-pgsql12-centos8-template.json"  $POSTGRESQL_PARAMS | oc apply -n"$(project)" -f -
+ oc process -f "$(configdir)/openshift-pgsql12-template.json"  $POSTGRESQL_PARAMS | oc delete -n"$(project)" -f -
+ oc delete configmap -n"$(project)" leaderboard-schema
+ oc delete -n"$(project)" -f "$(configdir)/leaderboard-schema-job.yaml"
 }
 
 installPostgresql::description(){

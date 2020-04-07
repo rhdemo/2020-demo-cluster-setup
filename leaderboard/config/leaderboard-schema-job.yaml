@@ -1,0 +1,43 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: leaderboard-schema
+spec:
+  ttlSecondsAfterFinished: 100
+  template:
+    spec:
+      volumes:
+        - name: leaderboard-schema
+          configMap:
+            name: leaderboard-schema
+      containers:
+        - name: pgsql12-client
+          image: quay.io/rhdevelopers/openshift-pgsql12-client
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PG_HOST
+              value: postgresql
+            - name: PG_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: openshift-pgsql12-primary-secret
+                  key: database-db
+            - name: PG_USER_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: openshift-pgsql12-primary-secret
+                  key: database-username
+            - name: PG_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: openshift-pgsql12-primary-secret
+                  key: database-username-password
+          args:
+            - -f /opt/app-root/schema.sql
+          volumeMounts:
+            - name: leaderboard-schema
+              mountPath: /opt/app-root/
+              readOnly: true
+      restartPolicy: Never
+  backoffLimit: 4

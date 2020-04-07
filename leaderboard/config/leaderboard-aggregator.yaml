@@ -15,6 +15,9 @@ parameters:
   - name: REPLICAS
     value: "1"
     required: true
+  - name: PG_SECRET
+    value: openshift-pgsql12-primary-secret
+    required: true
   - name: IMAGE_REPOSITORY
     displayName: Image Repository
     value: quay.io/redhatdemo/2020-leaderboard-aggregator:latest
@@ -49,6 +52,7 @@ objects:
         metadata:
           labels:
             app: ${APPLICATION_NAME}
+            topic: ${KAFKA_STREAMS_TOPIC}
         spec:
           containers:
             - image: ${IMAGE_REPOSITORY}
@@ -59,6 +63,16 @@ objects:
                   value: ${APPLICATION_NAME}
                 - name: QUARKUS_KAFKA_STREAMS_TOPICS
                   value: ${KAFKA_STREAMS_TOPIC}
+                - name: QUARKUS_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PG_SECRET}
+                      key: database-username
+                - name: QUARKUS_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PG_SECRET}
+                      key: database-username-password
               ports:
                 - containerPort: 8080
                   name: http

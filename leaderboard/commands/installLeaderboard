@@ -25,7 +25,8 @@ installLeaderboard::clean(){
     header_text "\n\n######## leaderboard::deploy:: Delete Leaderboard Aggregator:: $appName${topic/./-}  ########\n"
     LEADER_PARAMS="REPLICAS=$LEADERBOARD_AGGREGATOR_REPLICAS \
       -p APPLICATION_NAME=$appName${topic/./-} \
-      -p KAFKA_STREAMS_TOPIC=$topic"
+      -p KAFKA_STREAMS_TOPIC=$topic \
+      -p PG_SECRET=openshift-pgsql12-primary-secret"
     oc process -f "$(configdir)/leaderboard-aggregator.yaml" $LEADER_PARAMS | oc delete -n "$(project)" -f -
   done
 }
