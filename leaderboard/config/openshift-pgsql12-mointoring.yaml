@@ -4,22 +4,24 @@ kind: PersistentVolumeClaim
 metadata:
   name: pgdata-pvc
 spec:
+  storageClassName: iops
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 20Gi
+      storage: 200Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: pgwal-pvc
 spec:
+  storageClassName: iops
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 4Gi
+      storage: 200Gi
 ---
 kind: Secret
 apiVersion: v1
