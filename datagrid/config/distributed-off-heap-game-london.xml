@@ -10,7 +10,7 @@
             </memory>
             <persistence>
                 <rest-store xmlns="urn:infinispan:config:store:rest:10.1" shared="true" segmented="false" cache-name="game">
-                    <write-behind />
+                    <write-behind modification-queue-size="16384" />
                     <remote-server host="datagrid-service-datagrid-demo.apps.summit-gcp-ffm1.redhatgcpkeynote.com" port="80" />
                     <connection-pool buffer-size="8192" max-connections-per-host="4" max-total-connections="20" connection-timeout="60000" socket-timeout="60000" tcp-no-delay="true" />
                 </rest-store>
