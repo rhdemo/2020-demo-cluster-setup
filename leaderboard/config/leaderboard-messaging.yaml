@@ -19,13 +19,13 @@ parameters:
     value: quay.io/redhatdemo/2020-leaderboard-messaging:latest
     required: true
   - name: CONTAINER_REQUEST_CPU
-    value: 150m
+    value: "250m"
   - name: CONTAINER_REQUEST_MEMORY
-    value: 100Mi
+    value: "500Mi"
   - name: CONTAINER_LIMIT_CPU
-    value: 300m
+    value: "1"
   - name: CONTAINER_LIMIT_MEMORY
-    value: 200Mi
+    value: "1Gi"
   - name: PG_SECRET
     required: true
     displayName: PostgreSQL Secret

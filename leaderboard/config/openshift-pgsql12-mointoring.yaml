@@ -83,7 +83,7 @@ spec:
             - name: PG_NETWORK_MASK
               value: all
             - name: PG_MAX_CONNECTIONS
-              value: "500"
+              value: "800"
             # 25% of the memory in mb
             - name: PG_SHARED_BUFFERS
               value: "2048"
@@ -107,8 +107,8 @@ spec:
           imagePullPolicy: Always
           resources:
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: "4Gi"
+              cpu: "2"
           ports:
             - name: http
               containerPort: 8080
