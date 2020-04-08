@@ -3,7 +3,8 @@
 installLeaderboardAPI::run() {
   header_text "\n\n######## leaderboard::deploy:: Install Leaderboard API ########\n"  
   LEADER_PARAMS="IMAGE_REPOSITORY=2020-leaderboard-aggregator \
-   -p REPLICAS=$LEADERBOARD_API_REPLICAS"
+   -p REPLICAS=$LEADERBOARD_API_REPLICAS \
+   -p PG_SECRET=openshift-pgsql12-primary-secret"
   oc process -f "$(configdir)/leaderboard-api.yaml" $LEADER_PARAMS | oc apply -n "$(project)" -f -
 }
 

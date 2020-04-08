@@ -14,6 +14,9 @@ parameters:
   - name: REPLICAS
     value: "1"
     required: true
+  - name: PG_SECRET
+    value: openshift-pgsql12-primary-secret
+    required: true
   - name: IMAGE_REPOSITORY
     displayName: Image Repository
     value: quay.io/redhatdemo/2020-leaderboard-api:latest
@@ -53,18 +56,29 @@ objects:
             - image: ${IMAGE_REPOSITORY}
               imagePullPolicy: Always
               name: api
+              env:
+                - name: QUARKUS_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PG_SECRET}
+                      key: database-username
+                - name: QUARKUS_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PG_SECRET}
+                      key: database-username-password
               ports:
                 - containerPort: 8080
                   name: http
                   protocol: TCP
-              livenessProbe:
-                httpGet:
-                  path: /health/live
-                  port: 8080
-              readinessProbe:
-                httpGet:
-                  path: /health/ready
-                  port: 8080
+              # livenessProbe:
+              #   httpGet:
+              #     path: /health/live
+              #     port: 8080
+              # readinessProbe:
+              #   httpGet:
+              #     path: /health/ready
+              #     port: 8080
               resources:
                 requests:
                   cpu: ${CONTAINER_REQUEST_CPU}

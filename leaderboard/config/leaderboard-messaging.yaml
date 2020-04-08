@@ -19,13 +19,16 @@ parameters:
     value: quay.io/redhatdemo/2020-leaderboard-messaging:latest
     required: true
   - name: CONTAINER_REQUEST_CPU
-    value: 150m
+    value: "250m"
   - name: CONTAINER_REQUEST_MEMORY
-    value: 100Mi
+    value: "500Mi"
   - name: CONTAINER_LIMIT_CPU
-    value: 300m
+    value: "1"
   - name: CONTAINER_LIMIT_MEMORY
-    value: 200Mi
+    value: "1Gi"
+  - name: PG_SECRET
+    required: true
+    displayName: PostgreSQL Secret
 
 objects:
   - apiVersion: v1
@@ -53,18 +56,29 @@ objects:
             - image: ${IMAGE_REPOSITORY}
               imagePullPolicy: Always
               name: messaging
+              env:
+                - name: QUARKUS_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PG_SECRET}
+                      key: database-username
+                - name: QUARKUS_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PG_SECRET}
+                      key: database-username-password
               ports:
                 - containerPort: 8080
                   name: http
                   protocol: TCP
-              livenessProbe:
-                httpGet:
-                  path: /health/live
-                  port: 8080
-              readinessProbe:
-                httpGet:
-                  path: /health/ready
-                  port: 8080
+              # livenessProbe:
+              #   httpGet:
+              #     path: /health/live
+              #     port: 8080
+              # readinessProbe:
+              #   httpGet:
+              #     path: /health/ready
+              #     port: 8080
               resources:
                 requests:
                   cpu: ${CONTAINER_REQUEST_CPU}

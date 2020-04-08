@@ -3,7 +3,8 @@
 installLeaderboardBroadcast::run() {
   header_text "\n\n######## leaderboard::deploy:: Install Leaderboard Broadcast ########\n"  
   LEADER_PARAMS="IMAGE_REPOSITORY=2020-leaderboard-broadcast \
-   -p REPLICAS=$LEADERBOARD_BROADCAST_REPLICAS"
+   -p REPLICAS=$LEADERBOARD_BROADCAST_REPLICAS \
+   -p PG_SECRET=openshift-pgsql12-primary-secret"
   oc process -f "$(configdir)/leaderboard-broadcast.yaml" $LEADER_PARAMS | oc apply -n "$(project)" -f -
 }
 

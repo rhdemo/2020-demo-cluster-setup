@@ -3,7 +3,8 @@
 installLeaderboardMessaging::run() {
   header_text "\n\n######## leaderboard::deploy:: Install Leaderboard Messaging ########\n"  
   LEADER_PARAMS="IMAGE_REPOSITORY=2020-leaderboard-messaging \
-   -p REPLICAS=$LEADERBOARD_MESSAGING_REPLICAS"
+   -p REPLICAS=$LEADERBOARD_MESSAGING_REPLICAS \
+   -p PG_SECRET=openshift-pgsql12-primary-secret"
   oc process -f "$(configdir)/leaderboard-messaging.yaml" $LEADER_PARAMS | oc apply -n "$(project)" -f -
 }
 

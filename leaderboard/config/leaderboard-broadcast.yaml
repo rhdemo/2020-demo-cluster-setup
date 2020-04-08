@@ -26,7 +26,9 @@ parameters:
     value: 300m
   - name: CONTAINER_LIMIT_MEMORY
     value: 200Mi
-
+  - name: PG_SECRET
+    required: true
+    displayName: PostgreSQL Secret
 objects:
   - apiVersion: v1
     kind: DeploymentConfig
@@ -53,18 +55,29 @@ objects:
             - image: ${IMAGE_REPOSITORY}
               imagePullPolicy: Always
               name: broadcast
+              env:
+                - name: QUARKUS_DATASOURCE_USERNAME
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PG_SECRET}
+                      key: database-username
+                - name: QUARKUS_DATASOURCE_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: ${PG_SECRET}
+                      key: database-username-password
               ports:
                 - containerPort: 8080
                   name: http
                   protocol: TCP
-              livenessProbe:
-                httpGet:
-                  path: /health/live
-                  port: 8080
-              readinessProbe:
-                httpGet:
-                  path: /health/ready
-                  port: 8080
+              # livenessProbe:
+              #   httpGet:
+              #     path: /health/live
+              #     port: 8080
+              # readinessProbe:
+              #   httpGet:
+              #     path: /health/ready
+              #     port: 8080
               resources:
                 requests:
                   cpu: ${CONTAINER_REQUEST_CPU}

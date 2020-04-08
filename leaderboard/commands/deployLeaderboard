@@ -2,30 +2,9 @@
 
 deployLeaderboard::run() {
   header_text "\n\n######## leaderboard::deploy:: Deploying Leaderboard Aggregator ########\n"
-
-  prRunName=$(tkn pipeline start  leaderboard-deploy \
-   --namespace "$(project)" \
-   --resource app-source=git-source \
-   --resource app-image=leaderboard-aggregator-image \
-   --param applicationSrcDir=leaderboard-aggregator \
-   --param mavenBuildCmd=mvn,-Paggregator,clean,install \
-   --param mavenMirrorUrl="$MAVEN_MIRROR_URL" \
-    | awk 'NR==1{print $3}')
-
-   prStatus="Running"
-   while [ "$prStatus" != "Succeeded" ]
-   do
-      prStatus=$(oc get -n $(project) pipelinerun $prRunName -o jsonpath="{.status.conditions[].reason}")
-      if [ "$prStatus" == "Failed" ];
-      then
-        echo "ERROR:(LB-AGG-DEPLOY) Pipeline $prRunName failed"
-        tkn pr logs -L
-        break;
-      fi
-      header_text "\n Waiting for pipeline $prRunName to complete \n"
-      sleep 10
-   done
-   header_text "\n Leaderboard Aggregator Pipeline completed \n"
+  oc import-image 2020-leaderboard-aggregator \
+    --from=quay.io/redhatdemo/2020-leaderboard-aggregator \
+    --confirm
 }
 
 deployLeaderboard::usage(){

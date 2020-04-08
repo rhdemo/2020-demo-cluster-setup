@@ -1,0 +1,28 @@
+kubectl exec -c client (kubectl get pods --selector=app=postgresql -ojsonpath="{.items[0].metadata.name}") \
+  -- psql -h localhost -U demo -d gamedb -w -f /opt/sql/schemas/schema.sql
+
+kubectl exec -c client (kubectl get pods --selector=app=postgresql -ojsonpath="{.items[0].metadata.name}") \
+  -- psql -h localhost -U demo -d gamedb -w -c "select now();"
+
+kubectl exec -c client (kubectl get pods --selector=app=postgresql -ojsonpath="{.items[0].metadata.name}") \
+  -- /usr/libexec/genReports.sh
+
+
+Log Analyzer:
+
+
+echo "kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: loganalyzer
+spec:
+  to:
+    kind: Service
+    name: postgresql
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Allow
+  wildcardPolicy: None" | oc apply -f -
