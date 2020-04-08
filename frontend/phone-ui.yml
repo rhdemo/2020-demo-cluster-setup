@@ -19,9 +19,9 @@ parameters:
     value: quay.io/redhatdemo/2020-phone-ui:latest
     required: true
   - name: CONTAINER_REQUEST_CPU
-    value: 500m
+    value: 200m
   - name: CONTAINER_REQUEST_MEMORY
-    value: 500Mi
+    value: 200Mi
   - name: CONTAINER_LIMIT_CPU
     value: 500m
   - name: CONTAINER_LIMIT_MEMORY

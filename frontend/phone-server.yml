@@ -32,7 +32,7 @@ parameters:
   - name: CONTAINER_REQUEST_CPU
     value: 500m
   - name: CONTAINER_REQUEST_MEMORY
-    value: 1000Mi
+    value: 500Mi
   - name: CONTAINER_LIMIT_CPU
     value: 1000m
   - name: CONTAINER_LIMIT_MEMORY

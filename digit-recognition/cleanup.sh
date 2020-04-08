@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-printf "\n\n######## CLEANUP frontend/digit_recognition/cleanup ########\n"
+printf "\n\n######## CLEANUP ai/digit_recognition/cleanup ########\n"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-PROJECT=${PROJECT:-frontend}
+PROJECT=${PROJECT:-ai}
 QUAY_ORG=${QUAY_ORG:-redhatdemo}
 KEY_FILE=${KEY_FILE:-prod-key.pem}
 CERTIFICATE_FILE=${CERTIFICATE_FILE:-prod-cert.pem}
