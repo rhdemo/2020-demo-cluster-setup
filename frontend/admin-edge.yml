@@ -33,9 +33,9 @@ parameters:
     value: quay.io/redhatdemo/2020-admin-edge:latest
     required: true
   - name: CONTAINER_REQUEST_CPU
-    value: 500m
+    value: 300m
   - name: CONTAINER_REQUEST_MEMORY
-    value: 1000Mi
+    value: 400Mi
   - name: CONTAINER_LIMIT_CPU
     value: 1000m
   - name: CONTAINER_LIMIT_MEMORY

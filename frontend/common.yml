@@ -32,7 +32,7 @@ parameters:
     value: "http://scoring.scoring.svc.cluster.local:8080"
     required: true
   - name: DIGIT_RECOGNITION_URL
-    value: "http://tf-cnn-rest:8501"
+    value: "http://tf-cnn-rest.ai.svc.cluster.local:8501"
     required: true
   - name: CLUSTER_NAME
     value: 'EDGE'
