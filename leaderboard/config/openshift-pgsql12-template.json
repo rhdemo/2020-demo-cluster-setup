@@ -99,7 +99,7 @@
     {
       "description": "Resource Limit Memory",
       "name": "PG_RES_MEMORY_LIMIT",
-      "value": "16Gi"
+      "value": "8Gi"
     },
     {
       "description": "Resource Limit CPU",
