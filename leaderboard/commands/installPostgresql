@@ -4,18 +4,14 @@ installPostgresql::run() {
   if [ $PG_MODE = "prod" ];
   then 
     header_text "Deploying PostgeSQL(Prod)"
-    oc import-image openshift-pgsql12-primary \
-      --from=quay.io/redhatdemo/openshift-pgsql12-primary \
-      --confirm
-    POSTGRESQL_PARAMS="PG_NETWORK_MASK=all"  
-    oc process -f "$(configdir)/openshift-pgsql12-template.json" $POSTGRESQL_PARAMS | oc apply -n"$(project)" -f -
-    
-    sleep 5; while echo && oc get pods -n "$(project)" --selector=deploymentconfig=postgresql \
+    yq w  "$(configdir)/openshift-pgsql12-secret.yaml"  'stringData.database-username' $PGSQL12_USERNAME \
+      | yq w - 'stringData.database-username-password' $PGSQL12_PASSWORD 
+      | oc create -n"$(project)" -f -
+    oc apply -n"$(project)" -f "$(configdir)/openshift-pgsql12.yaml"    
+    sleep 5; while echo && oc get pods -n "$(project)" --selector=deploymentConfig=postgresql \
       | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
-
     oc create configmap -n"$(project)" leaderboard-schema \
-      --from-file=schema.sql="$(configdir)/schema.sql"
-      
+     --from-file=schema.sql="$(configdir)/schema.sql"      
     oc create -n"$(project)" -f "$(configdir)/leaderboard-schema-job.yaml"
   else
     header_text "Deploying PostgeSQL(Test)"

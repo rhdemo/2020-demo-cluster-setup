@@ -89,12 +89,12 @@
     {
       "description": "Size of /pgdata partition (GB)",
       "name": "PG_PGDATA",
-      "value": "200"
+      "value": "20"
     },
     {
       "description": "Size of /pgwal partition (GB)",
       "name": "PG_PGWAL",
-      "value": "200"
+      "value": "20"
     },
     {
       "description": "Resource Limit Memory",
@@ -137,7 +137,6 @@
         "name": "openshift-pgsql12-primary-pgdata"
       },
       "spec": {
-        "storageClassName": "iops",
         "accessModes": [
           "ReadWriteOnce"
         ],
@@ -155,7 +154,6 @@
         "name": "openshift-pgsql12-primary-pgwal"
       },
       "spec": {
-        "storageClassName": "iops",
         "accessModes": [
           "ReadWriteOnce"
         ],

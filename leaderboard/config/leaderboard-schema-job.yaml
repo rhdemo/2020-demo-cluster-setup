@@ -17,7 +17,7 @@ spec:
       containers:
         - name: pgsql12-client
           image: quay.io/rhdevelopers/openshift-pgsql12-primary:centos7-clients
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           env:
             - name: PG_HOST
               value: postgresql
@@ -37,9 +37,9 @@ spec:
                   name: openshift-pgsql12-primary-secret
                   key: database-username-password
           args:
-            - psql
-            - -h $PG_HOST
-            - -U PG_USER_NAME
+            - /usr/pgsql-12/bin/psql
+            - -h postgresql
+            - -U $PG_USER_NAME
             - -d gamedb
             - -w
             - -f /opt/sql/schemas/schema.sql
