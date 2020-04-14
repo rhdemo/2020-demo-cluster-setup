@@ -2,14 +2,14 @@ apiVersion: v1
 kind: Template
 
 labels:
-  application: admin-edge
+  application: bot-server
 
 metadata:
-  name: admin-edge
+  name: bot-server
 
 parameters:
   - name: APPLICATION_NAME
-    value: admin-edge
+    value: bot-server
     required: true
   - name: CONFIG_MAP_NAME
     value: 2020-demo-common
@@ -18,12 +18,12 @@ parameters:
     value: "2"
     required: true
   - name: IMAGE_REPOSITORY
-    value: quay.io/redhatdemo/2020-admin-edge:latest
+    value: quay.io/redhatdemo/2020-bot-server:latest
     required: true
   - name: CONTAINER_REQUEST_CPU
-    value: 300m
+    value: 500m
   - name: CONTAINER_REQUEST_MEMORY
-    value: 400Mi
+    value: 500Mi
   - name: CONTAINER_LIMIT_CPU
     value: 1000m
   - name: CONTAINER_LIMIT_MEMORY

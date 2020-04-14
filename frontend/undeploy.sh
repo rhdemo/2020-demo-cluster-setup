@@ -7,6 +7,7 @@ PROJECT=${PROJECT:-frontend}
 oc project ${PROJECT}
 oc process -f "${DIR}/common.yml" | oc delete -f -
 oc process -f "${DIR}/admin-edge.yml"  | oc delete -f -
+oc process -f "${DIR}/bot-server.yml"  | oc delete -f -
 oc process -f "${DIR}/phone-server.yml" | oc delete -f -
 oc process -f "${DIR}/phone-route.yml" | oc delete -f -
 oc process -f "${DIR}/phone-ui.yml" | oc delete -f -

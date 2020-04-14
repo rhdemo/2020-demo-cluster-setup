@@ -22,7 +22,7 @@ parameters:
   - name: DATAGRID_HOTROD_PORT
     value: "11222"
     required: true
-  - name: GAME_URL
+  - name: LEADERBOARD_URL
     value: "http://leaderboard-api.leaderboard.svc.cluster.local:8080"
     required: true
   - name: CLUSTER_NAME
@@ -46,5 +46,5 @@ objects:
     data:
       DATAGRID_HOST: ${DATAGRID_HOST}
       DATAGRID_HOTROD_PORT: ${DATAGRID_HOTROD_PORT}
-      GAME_URL: ${GAME_URL}
+      LEADERBOARD_URL: ${LEADERBOARD_URL}
       CLUSTER_NAME: ${CLUSTER_NAME}
