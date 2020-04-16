@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -eu
+
+set -o pipefail
+
+installLeaderboardAggregator::run() {
+  local appName="lbagg-"
+  IFS=',' read -ra edgeTopics <<< "$KAFKA_STREAMS_TOPICS"
+  for topic in "${edgeTopics[@]}"
+  do
+    header_text "\n\n######## leaderboard::deploy:: Install Leaderboard Aggregator:: $appName${topic/./-}  ########\n"
+    export APPLICATION_NAME="$appName${topic/./-}"
+    export KAFKA_STREAMS_TOPIC="$topic"
+    cat "$(configdir)/leaderboard-aggregator.yaml" | envsubst \
+      | oc apply -n"$(project)" --dry-run=${DRY_RUN:-false} -f -
+  done
+}
+
+installLeaderboardAggregator::usage(){
+  echo "No parameters"
+}
+
+installLeaderboardAggregator::clean(){
+  local appName="lbagg-"
+  IFS=',' read -ra edgeTopics <<< "$KAFKA_STREAMS_TOPICS"
+  for topic in "${edgeTopics[@]}"
+  do
+    header_text "\n\n######## leaderboard::deploy:: Delete Leaderboard Aggregator:: $appName${topic/./-}  ########\n"
+    oc delete -f "$(configdir)/leaderboard-aggregator.yaml"
+  done
+}
+
+installLeaderboardAggregator::description(){
+  echo "Install Leaderboard Aggregator Applications"
+}
