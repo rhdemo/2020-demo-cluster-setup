@@ -23,9 +23,9 @@ parameters:
     value: quay.io/redhatdemo/2020-leaderboard-aggregator:latest
     required: true
   - name: CONTAINER_REQUEST_CPU
-    value: "500m"
+    value: "1"
   - name: CONTAINER_REQUEST_MEMORY
-    value: "500Mi"
+    value: "1Gi"
   - name: CONTAINER_LIMIT_CPU
     value: "2"
   - name: CONTAINER_LIMIT_MEMORY

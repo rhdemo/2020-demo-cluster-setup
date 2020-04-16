@@ -19,33 +19,32 @@ spec:
           image: quay.io/rhdevelopers/openshift-pgsql12-primary:centos7-clients
           imagePullPolicy: Always
           env:
-            - name: PG_HOST
+            - name: PGHOST
               value: postgresql
-            - name: PG_DATABASE
+            - name: PGDATABASE
               valueFrom:
                 secretKeyRef:
                   name: openshift-pgsql12-primary-secret
                   key: database-db
-            - name: PG_USER_NAME
+            - name: PGUSER
               valueFrom:
                 secretKeyRef:
                   name: openshift-pgsql12-primary-secret
                   key: database-username
-            - name: PG_USER_PASSWORD
+            - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
                   name: openshift-pgsql12-primary-secret
                   key: database-username-password
+          command: ["/usr/pgsql-12/bin/psql"]
           args:
-            - /usr/pgsql-12/bin/psql
-            - -h postgresql
-            - -U $PG_USER_NAME
-            - -d gamedb
-            - -w
-            - -f /opt/sql/schemas/schema.sql
+            [
+              "--dbname=$(PGDATABASE)",
+              "--file=/opt/sql/schemas/schema.sql",
+              "--no-password",
+            ]
           volumeMounts:
             - name: leaderboard-schema
               mountPath: /opt/sql
-              readOnly: true
       restartPolicy: Never
-  backoffLimit: 4
+  backoffLimit: 1
