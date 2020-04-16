@@ -8,7 +8,7 @@
             <memory>
                 <off-heap />
             </memory>
-            <persistence>
+            <persistence availability-interval="-1">
                 <rest-store xmlns="urn:infinispan:config:store:rest:10.1" shared="true" segmented="false" cache-name="game">
                     <write-behind modification-queue-size="16384" />
                     <remote-server host="datagrid-service-datagrid-demo.apps.summit-gcp-ffm1.redhatgcpkeynote.com" port="80" />
