@@ -1,22 +1,17 @@
 #!/usr/bin/env bash
 
 installPostgresql::run() {
-  if [ $PG_MODE = "prod" ];
-  then 
-    header_text "Deploying PostgeSQL"
-    yq w  "$(configdir)/openshift-pgsql12-secret.yaml"  'stringData.database-username' $PGUSER \
-      | yq w - 'stringData.database-username-password' $PGPASSWORD \
-      | yq w - 'stringData.database-db' $PGDATABASE \
-      | oc create -n"$(project)" -f -
-    oc apply -n"$(project)" -f "$(configdir)/openshift-pgsql12.yaml"    
-    sleep 5; while echo && oc get pods -n "$(project)" --selector=app=postgresql \
-      | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
-    oc create configmap -n"$(project)" leaderboard-schema \
-     --from-file=schema.sql="$(configdir)/schema.sql"      
-    oc create -n"$(project)" -f "$(configdir)/leaderboard-schema-job.yaml"
-    header_text "Waiting for schema creation to complete"
-    oc wait --for=condition=complete --timeout=120s job/leaderboard-schema
-  fi
+  header_text "Deploying PostgeSQL"
+  cat"$(configdir)/openshift-pgsql12-secret.yaml" 'metadata.name' | envsubst \
+    | oc create -n"$(project)" -f -
+  oc apply -n"$(project)" -f "$(configdir)/openshift-pgsql12.yaml"    
+  sleep 5; while echo && oc get pods -n "$(project)" --selector=app=postgresql \
+    | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
+  oc create configmap -n"$(project)" leaderboard-schema \
+    --from-file=schema.sql="$(configdir)/schema.sql"      
+  oc create -n"$(project)" -f "$(configdir)/leaderboard-schema-job.yaml"
+  header_text "Waiting for schema creation to complete"
+  oc wait --for=condition=complete --timeout=120s job/leaderboard-schema
 }
 
 installPostgresql::usage(){

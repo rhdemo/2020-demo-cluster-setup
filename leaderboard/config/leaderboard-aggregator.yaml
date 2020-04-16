@@ -28,12 +28,12 @@ spec:
             - name: QUARKUS_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: openshift-pgsql12-primary-secret
+                  name: ${PG_SECRET}
                   key: database-username
             - name: QUARKUS_DATASOURCE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: openshift-pgsql12-primary-secret
+                  name: ${PG_SECRET}
                   key: database-username-password
           ports:
             - containerPort: 8080
