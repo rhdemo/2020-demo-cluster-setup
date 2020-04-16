@@ -1,30 +1,17 @@
 #!/usr/bin/env bash
 
 installPostgresql::run() {
-  if [ $PG_MODE = "prod" ];
-  then 
-    header_text "Deploying PostgeSQL(Prod)"
-    oc import-image openshift-pgsql12-primary \
-      --from=quay.io/redhatdemo/openshift-pgsql12-primary \
-      --confirm
-    POSTGRESQL_PARAMS="PG_NETWORK_MASK=all"  
-    oc process -f "$(configdir)/openshift-pgsql12-template.json" $POSTGRESQL_PARAMS | oc apply -n"$(project)" -f -
-    
-    sleep 5; while echo && oc get pods -n "$(project)" --selector=deploymentconfig=postgresql \
-      | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
-
-    oc create configmap -n"$(project)" leaderboard-schema \
-      --from-file=schema.sql="$(configdir)/schema.sql"
-      
-    oc create -n"$(project)" -f "$(configdir)/leaderboard-schema-job.yaml"
-  else
-    header_text "Deploying PostgeSQL(Test)"
-    oc create configmap -n"$(project)" appsql \
-      --from-file=schema.sql="$(configdir)/schema.sql"
-    oc apply -n"$(project)" -f "$(configdir)/openshift-pgsql12-mointoring.yaml"
-    sleep 5; while echo && oc get pods -n "$(project)" --selector=deploymentconfig=postgresql \
-      | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
-  fi
+  header_text "Deploying PostgeSQL"
+  cat"$(configdir)/openshift-pgsql12-secret.yaml" 'metadata.name' | envsubst \
+    | oc create -n"$(project)" -f -
+  oc apply -n"$(project)" -f "$(configdir)/openshift-pgsql12.yaml"    
+  sleep 5; while echo && oc get pods -n "$(project)" --selector=app=postgresql \
+    | grep -v -E "(Running|Completed|STATUS)"; do sleep 5; done
+  oc create configmap -n"$(project)" leaderboard-schema \
+    --from-file=schema.sql="$(configdir)/schema.sql"      
+  oc create -n"$(project)" -f "$(configdir)/leaderboard-schema-job.yaml"
+  header_text "Waiting for schema creation to complete"
+  oc wait --for=condition=complete --timeout=120s job/leaderboard-schema
 }
 
 installPostgresql::usage(){
@@ -32,11 +19,11 @@ installPostgresql::usage(){
 }
 
 installPostgresql::clean(){
-  header_text "UnDeploying PostgeSQL"
- POSTGRESQL_PARAMS="PG_NETWORK_MASK=all"
- oc process -f "$(configdir)/openshift-pgsql12-template.json"  $POSTGRESQL_PARAMS | oc delete -n"$(project)" -f -
- oc delete configmap -n"$(project)" leaderboard-schema
- oc delete -n"$(project)" -f "$(configdir)/leaderboard-schema-job.yaml"
+  header_text "Undeploying PostgeSQL"
+ oc delete -n"$(project)" -f "$(configdir)/openshift-pgsql12.yaml" || true
+ oc delete configmap -n"$(project)" leaderboard-schema || true
+ oc delete -n"$(project)" -f "$(configdir)/leaderboard-schema-job.yaml" || true
+ oc delete -n"$(project)" -f "$(configdir)/openshift-pgsql12-secret.yaml" || true
 }
 
 installPostgresql::description(){

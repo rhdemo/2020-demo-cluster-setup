@@ -9,7 +9,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 200Gi
+      storage: 500Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -21,21 +21,12 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 200Gi
----
-kind: Secret
-apiVersion: v1
-metadata:
-  name: openshift-pgsql12-primary-secret
-stringData:
-  database-db: "gamedb"
-  database-username: "demo"
-  database-username-password: "password!"
+      storage: 500Gi
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgresql
+  name: ${PG_SERVICE_NAME}
 spec:
   selector:
     app: postgresql
@@ -43,9 +34,6 @@ spec:
     - name: pgsql
       port: 5432
       targetPort: 5432
-    # - name: http
-    #   port: 8080
-    #   targetPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -62,7 +50,7 @@ spec:
     spec:
       containers:
         - name: postgresql
-          image: quay.io/rhdevelopers/openshift-pgsql12-primary:centos7-monitoring
+          image: quay.io/redhatdemo/openshift-pgsql12-primary:centos7
           imagePullPolicy: Always
           resources:
             limits:
@@ -100,57 +88,10 @@ spec:
               name: pgdata
             - mountPath: /pgwal
               name: pgwal
-        - name: client
-          image: quay.io/rhdevelopers/openshift-pgsql12-primary:centos7-clients
-          imagePullPolicy: Always
-          resources:
-            limits:
-              memory: "500Mi"
-              cpu: "250m"
-          ports:
-            - name: http
-              containerPort: 8080
-          env:
-            - name: PG_USER_PASSWORD
-              value: password!
-            - name: PG_USER_NAME
-              value: demo
-            - name: PG_DATABASE
-              value: gamedb
-            - name: PG_HOST
-              value: localhost
-          volumeMounts:
-            - mountPath: /opt/sql
-              name: appsql
-            - mountPath: /pgdata
-              name: pgdata
-              readOnly: true
       volumes:
-        - name: appsql
-          configMap:
-            name: appsql
-            items:
-              - key: schema.sql
-                path: schemas/schema.sql
         - name: pgdata
           persistentVolumeClaim:
             claimName: pgdata-pvc
         - name: pgwal
           persistentVolumeClaim:
             claimName: pgwal-pvc
----
-kind: Route
-apiVersion: route.openshift.io/v1
-metadata:
-  name: loganalyzer
-spec:
-  to:
-    kind: Service
-    name: postgresql
-    weight: 100
-  port:
-    targetPort: http
-  tls:
-    termination: edge
-    insecureEdgeTerminationPolicy: Allow
-  wildcardPolicy: None

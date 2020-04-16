@@ -2,10 +2,8 @@
 
 installLeaderboardAPI::run() {
   header_text "\n\n######## leaderboard::deploy:: Install Leaderboard API ########\n"  
-  LEADER_PARAMS="IMAGE_REPOSITORY=2020-leaderboard-aggregator \
-   -p REPLICAS=$LEADERBOARD_API_REPLICAS \
-   -p PG_SECRET=openshift-pgsql12-primary-secret"
-  oc process -f "$(configdir)/leaderboard-api.yaml" $LEADER_PARAMS | oc apply -n "$(project)" -f -
+  cat "$(configdir)/leaderboard-api.yaml" | envsubst \
+    | oc apply -n "$(project)" --dry-run=${DRY_RUN:-false} -f -
 }
 
 installLeaderboardAPI::usage(){
@@ -16,7 +14,7 @@ installLeaderboardAPI::clean(){
  header_text "\n\n######## leaderboard::deploy:: Delete Leaderboard API ########\n"  
   LEADER_PARAMS="IMAGE_REPOSITORY=2020-leaderboard-aggregator \
    -p REPLICAS=$LEADERBOARD_API_REPLICAS"
-  oc process -f "$(configdir)/leaderboard-api.yaml" $LEADER_PARAMS | oc delete -n "$(project)" -f -
+  oc delete -f "$(configdir)/leaderboard-api.yaml"
 }
 
 installLeaderboardAPI::description(){

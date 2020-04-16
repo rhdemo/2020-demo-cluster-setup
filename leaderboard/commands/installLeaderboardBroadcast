@@ -2,10 +2,8 @@
 
 installLeaderboardBroadcast::run() {
   header_text "\n\n######## leaderboard::deploy:: Install Leaderboard Broadcast ########\n"  
-  LEADER_PARAMS="IMAGE_REPOSITORY=2020-leaderboard-broadcast \
-   -p REPLICAS=$LEADERBOARD_BROADCAST_REPLICAS \
-   -p PG_SECRET=openshift-pgsql12-primary-secret"
-  oc process -f "$(configdir)/leaderboard-broadcast.yaml" $LEADER_PARAMS | oc apply -n "$(project)" -f -
+  cat "$(configdir)/leaderboard-broadcast.yaml"| envsubst \
+    | oc apply -n "$(project)" --dry-run=${DRY_RUN:-false} -f -
 }
 
 installLeaderboardBroadcast::usage(){
@@ -14,9 +12,7 @@ installLeaderboardBroadcast::usage(){
 
 installLeaderboardBroadcast::clean(){
   header_text "\n\n######## leaderboard::deploy:: Delete Leaderboard Broadcast ########\n"  
-  LEADER_PARAMS="IMAGE_REPOSITORY=2020-leaderboard-broadcast \
-   -p REPLICAS=$LEADERBOARD_BROADCAST_REPLICAS"
-  oc process -f "$(configdir)/leaderboard-broadcast.yaml" $LEADER_PARAMS | oc delete -n "$(project)" -f -
+  oc delete -f "$(configdir)/leaderboard-broadcast.yaml"
 }
 
 installLeaderboardBroadcast::description(){

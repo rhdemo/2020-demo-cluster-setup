@@ -1,104 +1,58 @@
-apiVersion: v1
-kind: Template
-
+apiVersion: apps/v1
+kind: Deployment
 metadata:
+  labels:
+    app: leaderboard-broadcast
+    app.kubernetes.io/part-of: leaderboard-messaging
   name: leaderboard-broadcast
-
-parameters:
-  - name: APPLICATION_NAME
-    required: true
-    value: leaderboard-broadcast
-  - name: ROUTE_NAME
-    value: leaderboard-broadcast
-    required: true
-  - name: REPLICAS
-    value: "1"
-    required: true
-  - name: IMAGE_REPOSITORY
-    displayName: Image Repository
-    value: quay.io/redhatdemo/2020-leaderboard-broadcast:latest
-    required: true
-  - name: CONTAINER_REQUEST_CPU
-    value: 150m
-  - name: CONTAINER_REQUEST_MEMORY
-    value: 100Mi
-  - name: CONTAINER_LIMIT_CPU
-    value: 300m
-  - name: CONTAINER_LIMIT_MEMORY
-    value: 200Mi
-  - name: PG_SECRET
-    required: true
-    displayName: PostgreSQL Secret
-objects:
-  - apiVersion: v1
-    kind: DeploymentConfig
+spec:
+  replicas: ${LEADERBOARD_BROADCAST_REPLICAS}
+  selector:
+    matchLabels:
+      app: leaderboard-broadcast
+  template:
     metadata:
       labels:
-        app: ${APPLICATION_NAME}
-        app.kubernetes.io/part-of: leaderboard-messaging
-      name: ${APPLICATION_NAME}
+        app: leaderboard-broadcast
     spec:
-      replicas: ${{REPLICAS}}
-      revisionHistoryLimit: 2
-      selector:
-        app: ${APPLICATION_NAME}
-      strategy:
-        rollingParams:
-          timeoutSeconds: 3600
-        type: Rolling
-      template:
-        metadata:
-          labels:
-            app: ${APPLICATION_NAME}
-        spec:
-          containers:
-            - image: ${IMAGE_REPOSITORY}
-              imagePullPolicy: Always
-              name: broadcast
-              env:
-                - name: QUARKUS_DATASOURCE_USERNAME
-                  valueFrom:
-                    secretKeyRef:
-                      name: ${PG_SECRET}
-                      key: database-username
-                - name: QUARKUS_DATASOURCE_PASSWORD
-                  valueFrom:
-                    secretKeyRef:
-                      name: ${PG_SECRET}
-                      key: database-username-password
-              ports:
-                - containerPort: 8080
-                  name: http
-                  protocol: TCP
-              # livenessProbe:
-              #   httpGet:
-              #     path: /health/live
-              #     port: 8080
-              # readinessProbe:
-              #   httpGet:
-              #     path: /health/ready
-              #     port: 8080
-              resources:
-                requests:
-                  cpu: ${CONTAINER_REQUEST_CPU}
-                  memory: ${CONTAINER_REQUEST_MEMORY}
-                limits:
-                  cpu: ${CONTAINER_LIMIT_CPU}
-                  memory: ${CONTAINER_LIMIT_MEMORY}
-              volumeMounts:
-                - mountPath: /etc/messaging
-                  name: skupper-amqp-trust
-          volumes:
-            - name: skupper-amqp-trust
-              secret:
-                secretName: skupper
-      triggers:
-        - type: ConfigChange
-        - type: ImageChange
-          imageChangeParams:
-            automatic: true
-            from:
-              kind: ImageStreamTag
-              name: 2020-leaderboard-broadcast:latest
-            containerNames:
-              - "broadcast"
+      containers:
+        - image: ${LEADERBOARD_BROADCAST_IMAGE}
+          imagePullPolicy: Always
+          name: broadcast
+          env:
+            - name: QUARKUS_DATASOURCE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: ${PG_SECRET}
+                  key: database-username
+            - name: QUARKUS_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ${PG_SECRET}
+                  key: database-username-password
+          ports:
+            - containerPort: 8080
+              name: http
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 8080
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 8080
+          resources:
+            requests:
+              cpu: "150m"
+              memory: "100Mi"
+            limits:
+              cpu: "300m"
+              memory: "200Mi"
+          volumeMounts:
+            - mountPath: /etc/messaging
+              name: skupper-amqp-trust
+      volumes:
+        - name: skupper-amqp-trust
+          secret:
+            secretName: skupper
