@@ -65,11 +65,13 @@ objects:
         spec:
           containers:
           - env:
+            - name: USER
+              value: lnd1-ffm1
+            - name: PASS
+              value: lnd1-ffm1
             - name: CONFIG_PATH
               value: /config/server.yaml
-            - name: MANAGED_ENV
-              value: "TRUE"
-            image: quay.io/infinispan/server@sha256:f44755470d4b26750fdf3c102ce2cc18533761c7bb6ae74d460e0f4c6a618a89
+            image: quay.io/remerson/infinispan@sha256:5663bf8bdf4aae13aa1949d6cf342f5ae67ca5ee522dbbc1c9b7123ef151f65d
             name: datagrid-service
             ports:
             - containerPort: 7800
@@ -103,15 +105,10 @@ objects:
             volumeMounts:
             - mountPath: /config
               name: config-volume
-            - mountPath: /opt/infinispan/server/lib
-              name: jar-volume
           volumes:
             - name: config-volume
               configMap:
                 name: datagrid-configuration
-            - name: jar-volume
-              configMap:
-                name: datagrid-jars
 parameters:
 - description: Specifies how many instances of the application to create in the cluster.
   displayName: Number of Instances
