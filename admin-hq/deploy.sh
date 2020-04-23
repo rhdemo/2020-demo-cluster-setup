@@ -24,7 +24,11 @@ skupper init --enable-router-console --router-console-auth openshift --id ${SKUP
 
 echo "Deploying Admin HQ Applications"
 
-oc process -f "${DIR}/admin-config.yml" -p CLUSTER_NAME="${CLUSTER_NAME}" | oc create -f -
+oc process -f "${DIR}/admin-config.yml" \
+  -p CLUSTER_NAME="${CLUSTER_NAME}" \
+  -p ADMIN_USERNAME="${ADMIN_USERNAME}" \
+  -p ADMIN_PASSWORD="${ADMIN_PASSWORD}" \
+  | oc create -f -
 oc process -f "${DIR}/admin-server.yml" | oc create -f -
 oc process -f "${DIR}/admin-ui.yml"  | oc create -f -
 oc process -f "${DIR}/dashboard-ui.yml" | oc create -f -

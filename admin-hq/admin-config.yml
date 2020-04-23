@@ -14,6 +14,8 @@ parameters:
   - name: CONFIG_MAP_NAME
     value: 2020-demo-admin
     required: true
+  - name: ADMIN_USERNAME
+    value: ""
   - name: ADMIN_PASSWORD
     value: ""
   - name: DATAGRID_HOST
@@ -37,6 +39,7 @@ objects:
       name: ${SECRET_NAME}
     data:
     stringData:
+      ADMIN_USERNAME: ${ADMIN_USERNAME}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD}
 
   - apiVersion: v1
