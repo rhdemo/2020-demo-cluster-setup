@@ -8,5 +8,6 @@ oc project ${PROJECT}
 oc process -f "${DIR}/admin-config.yml" | oc delete -f -
 oc process -f "${DIR}/admin-server.yml" | oc delete -f -
 oc process -f "${DIR}/admin-ui.yml"  | oc delete -f -
+oc process -f "${DIR}/dashboard-ui.yml"  | oc delete -f -
 
 skupper delete

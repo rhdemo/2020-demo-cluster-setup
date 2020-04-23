@@ -21,6 +21,7 @@ download_logs() {
   done
 }
 
+download_logs 'bot-server'
 download_logs 'phone-server'
 download_logs 'phone-ui'
 download_logs 'admin-edge'
