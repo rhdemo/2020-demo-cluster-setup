@@ -72,6 +72,8 @@ Admin UI: http://ui-admin-hq.hub-cluster (blank username/password unless set in 
 ### Leaderboard Services
 Creates services to consume data from mirrored kafka streams and aggregate and store them in Postgres.  Also deploys services to allow access to that data from the Leaderboard UI.
 ```
+make leaderboard_project
+make leaderboard_install_postgresql
 make leaderboard_install_all
 ```
 
