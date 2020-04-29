@@ -111,7 +111,8 @@ This will create the `datagrid-demo` project and 2 pods for the datagrid service
 ```
 make datagrid
 ```
-London is backed-up to Frankfurt via remote store and additional scripting is done for those clusters.
+London is backed-up to Frankfurt via remote store and additional scripting is done for those clusters. For detailed
+deployment instructions please see the [Data Grid README](datagrid/README.md).
 
 ### Digit Recognition Service
 This will create the `ai` project and 12 pods for the digit-recognition service.

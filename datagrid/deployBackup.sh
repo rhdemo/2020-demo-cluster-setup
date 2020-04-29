@@ -3,6 +3,8 @@
 
 createProjectAndDeploy
 
+oc create -f service-external.yaml
+
 waitForDeployment
 
 executeBatchFile "batch"

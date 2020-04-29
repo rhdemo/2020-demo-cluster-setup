@@ -1,5 +1,0 @@
-create cache --file=/config/distributed-off-heap-players-london.xml players
-create cache --file=/config/distributed-off-heap-game-london.xml game
-
-cd caches/game
-put --encoding=application/json --file=/config/game-config.json game
