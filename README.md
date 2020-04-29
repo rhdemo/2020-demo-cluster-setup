@@ -41,7 +41,14 @@ make kafka
 This will create the `kafka-demo` project.  See above for additional info.
 ```
 make kafka
-```    
+```
+
+When the Kafka cluster is deployed, the next step is to deploy Kafka Mirror Maker 2 for mirroring data from all the clusters at the edge.
+Before running the deployment, be sure that the `clusters.lbs` file exists and it contains the Load Balancer addresses for all the Kafka clusters already deployed at the edge that have to be mirrored to the HQ.
+
+```
+make kafka_mirror_maker
+```
 
 ### Datagrid Service
 This will create the `datagrid-demo` project and 2 pods for the datagrid service.  Provides storage for the game state and bot config which will be pushed to the edge clusters.
@@ -94,7 +101,10 @@ The Edge clusters require
 This will create the `kafka-demo` project.  See above for additional info.
 ```
 make kafka
-```    
+```
+
+When the Kafka cluster is deployed, the script gets the Load Balancer address and append it into a `clusters.lbs` file.
+This file will contains all the Load Balancer addresses related to the edge clusters where Kafka is deployed that have to be mirrored to the HQ.
 
 ### Datagrid Service
 This will create the `datagrid-demo` project and 2 pods for the datagrid service.  Provides edge storage as a cache with notifications to frontend services.
