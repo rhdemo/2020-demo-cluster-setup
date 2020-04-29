@@ -71,7 +71,7 @@ objects:
               value: lnd1-ffm1
             - name: CONFIG_PATH
               value: /config/server.yaml
-            image: quay.io/remerson/infinispan@sha256:5663bf8bdf4aae13aa1949d6cf342f5ae67ca5ee522dbbc1c9b7123ef151f65d
+            image: quay.io/infinispan/server:10.1.3.Final
             name: datagrid-service
             ports:
             - containerPort: 7800
