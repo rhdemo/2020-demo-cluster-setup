@@ -2,7 +2,7 @@
 Scripts to install DG 8.0 in the `datagrid-demo` project.
 
 ## Default Configuration
-- Uses Infinispan 10.1.2.Final upstream image
+- Uses Infinispan 10.1.3.Final upstream image
 - Distributed mode
     - Each key/value is distributed across two nodes
 - Entries stored off-heap
