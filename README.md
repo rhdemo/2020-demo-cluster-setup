@@ -39,6 +39,8 @@ make kafka
 
 ### Kafka
 This will create the `kafka-demo` project.  See above for additional info.
+Before deploying the Kafka cluster on HQ, change the number of partitions in the `KafkaTopic` (in the `kafka/cluster/kafka-topics.yaml` folder) to 300 because it will contain an aggregation of messages coming from the clusters at the edge.
+
 ```
 make kafka
 ```
@@ -101,6 +103,8 @@ The Edge clusters require
     
 ### Kafka 
 This will create the `kafka-demo` project.  See above for additional info.
+Before deploying the Kafka cluster on HQ, be sure that the number of partitions in the `KafkaTopic` (in the `kafka/cluster/kafka-topics.yaml` folder) is the 50 default value.
+
 ```
 make kafka
 ```
